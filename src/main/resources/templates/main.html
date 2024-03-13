@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>블로그</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="hb"></div>
+    <div class="t">
+        <div class="eng">BLOG<span class="ko">블로그</span></div>
+        <div class="line"></div>
+        <div class="desc">나만의 글을 작성해보세요.</div>
+        <div style="text-align: center;">
+            <a class="start" href="/login" target="_self">시작하기</a>
+        </div>
+    </div>
+    <div class="c">
+        <div class="c_desc">최근 등록된 글목록입니다.</div>
+        <ul class="post_list">
+            <li><a href="/">박스</a></li>
+            <li><a href="/">박스</a></li>
+            <li><a href="/">박스</a></li>
+            <li><a href="/">박스</a></li>
+            <li><a href="/">박스</a></li>
+            <li><a href="/">박스</a></li>
+        </ul>
+
+    </div>
+
+
+</body>
+<script>
+
+</script>
+<style>
+    .hb{background: url(img/main_bg.jpg);position: absolute;z-index: -1;height: 550px;width: 100%;opacity: 0.9;}
+    .t{width:1000px;margin:0 auto;padding-top:180px;}
+    .line{border-bottom: 2px solid;color: #000;}
+    .desc{margin-top: 25px;text-align: center;color: rgba(0,0,0,.8);font-size: 45px;}
+    .start{margin-top: 45px;display: inline-block;background: #fff;border-radius: 20px;padding: 7px 20px;text-decoration-line: none;color:#000;font-weight: bold;}
+    .start:hover{background: #000;color:#fff;}
+    .c{width:1000px;margin:0 auto;margin-top:80px;}
+    .eng{font-weight: bold;font-size: 100px;letter-spacing: 20px;color: #000;}
+    .ko{font-size: 20px;color: rgba(0, 0, 0, .8);letter-spacing: 0;}
+    .c_desc{font-size: 15px;color: rgba(0, 0, 0, .8);}
+    .post_list{list-style:none; display: flex;padding-left:0;justify-content: space-between;}
+    .post_list>li{width:30%;}
+    .post_list>li:hover{box-shadow: 0 3px 15px rgba(0,0,0,.3);}
+    .post_list>li>a{}
+</style>
+</html>
