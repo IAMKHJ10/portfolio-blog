@@ -2,12 +2,14 @@ package com.portfolio.blog.entity;
 
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Member extends BaseEntity {
 
     @Id

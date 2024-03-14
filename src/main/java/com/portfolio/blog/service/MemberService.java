@@ -15,8 +15,8 @@ public class MemberService {
 
     @Transactional
     public void memberJoin(MemberDto memberDto){
-        Member findMember = memberRepository.findByName(memberDto.getUid())
-                .orElseThrow(RuntimeException::new);
+        Member findMember = memberRepository.findByUid(memberDto.getUid())
+                .orElseThrow(() -> new IllegalStateException("사용중인 아이디입니다."));
     }
 
 }
