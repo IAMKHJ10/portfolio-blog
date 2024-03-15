@@ -18,18 +18,18 @@ public class MemberController {
 
     @GetMapping("/member/join")
     public String memberJoinForm(Model model){
-        model.addAttribute("memberDto", new MemberDto());
+        model.addAttribute("form", new MemberDto());
         return "member/join";
     }
 
     @PostMapping("/member/join")
-    public String memberJoin(@Valid MemberDto memberDto, BindingResult result){
+    public String memberJoin(@Valid MemberDto form, BindingResult result){
 
         if(result.hasErrors()){
             return "member/join";
         }
 
-        memberService.memberJoin(memberDto);
+        memberService.memberJoin(form);
 
         return "redirect:/";
     }
