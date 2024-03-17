@@ -1,51 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>블로그</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-</head>
-<body>
-<div class="all">
-    <form action="/member/join" method="post" th:object="${form}">
-        <div class="joinForm">
-            <div class="j_title">BLOG</div>
-            <div class="join_box">
-                <div class="m_form">
-                    <div class="input_form">
-                        <input type="text" id="loginId" name="uid" placeholder="ID" required>
-                    </div>
-                    <p th:if="${#fields.hasErrors('uid')}" th:errors="*{uid}"></p>
-                </div>
-                <div class="m_form">
-                    <div class="input_form password">
-                        <input type="password" id="loginPw" name="password" placeholder="Password" required>
-                    </div>
-                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-                </div>
-                <div class="m_form">
-                    <div class="input_form name">
-                        <input type="text" th:field="*{name}" placeholder="이름" required>
-                    </div>
-                </div>
-                <div class="m_form">
-                    <div class="input_form email">
-                        <input type="email" th:field="*{email}" placeholder="이메일" required>
-                    </div>
-                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-                </div>
-            </div>
-            <button type="submit" class="join_btn">회원가입</button>
-        </div>
-    </form>
-</div>
-</body>
-<script>
-
-</script>
-<style>
+<head th:replace="common/header::header"></head>
+<style th:inline="javascript">
     .joinForm{width:400px;margin:100px auto 0;}
     .j_title{font-size: 60px;font-weight: bold;letter-spacing: 20px;color: #000;text-align: center;}
     .join_box{margin: 10px 0 0;border: 1px solid #ddd;border-radius: 3px;background-color: #fff;box-sizing: border-box;}
@@ -55,4 +11,39 @@
     .password, .name, .email{border-top: 1px solid #ddd;}
     .join_btn{margin: 20px 0 0;width: 100%;height: 48px;border-radius: 3px;font-size: 16px;color: #fff;background-color: #000;border: 0;}
 </style>
+<script th:inline="javascript">
+
+</script>
+<body>
+    <div class="all">
+        <form action="/member/join" method="post">
+            <div class="joinForm">
+                <div class="j_title">BLOG</div>
+                <div class="join_box">
+                    <div class="m_form">
+                        <div class="input_form">
+                            <input type="text" id="loginId" name="uid" placeholder="ID" required>
+                        </div>
+                    </div>
+                    <div class="m_form">
+                        <div class="input_form password">
+                            <input type="password" id="loginPw" name="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="m_form">
+                        <div class="input_form name">
+                            <input type="text" id="name" name="name" placeholder="이름" required>
+                        </div>
+                    </div>
+                    <div class="m_form">
+                        <div class="input_form email">
+                            <input type="email" id="email" name="email" placeholder="이메일" required>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="join_btn">회원가입</button>
+            </div>
+        </form>
+    </div>
+</body>
 </html>

@@ -1,6 +1,5 @@
 package com.portfolio.blog.service;
 
-import com.portfolio.blog.dto.MemberDto;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,18 +13,16 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void memberJoin(MemberDto memberDto){
-        memberRepository.findByUid(memberDto.getUid())
-                .orElseThrow(() -> new IllegalStateException("사용중인 아이디입니다."));
+    public Member save(Member member){
+        validateDuplicateMember(member); // 중복 체크
+        return memberRepository.save(member);
+    }
 
-        Member member = Member.builder()
-                .uid(memberDto.getUid())
-                .password(memberDto.getPassword())
-                .name(memberDto.getName())
-                .email(memberDto.getEmail())
-                .build();
-
-        memberRepository.save(member);
+    private void validateDuplicateMember(Member member) {
+        Member dupUid = memberRepository.findByUid(member.getUid());
+        if(dupUid!=null){
+            throw new IllegalStateException("이미 사용중인 아이디입니다.");
+        }
     }
 
 }

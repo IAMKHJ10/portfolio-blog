@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common/header::header"></head>
+<style>
+
+</style>
+<script th:inline="javascript">
+
+</script>
+<body>
+    <form action="/post/update" method="post" th:object="${form}">
+        <input type="hidden" name="id" th:value="${postDetail.id}">
+        제목 : <input type="text" name="title" id="title" th:value="${postDetail.title}">
+        내용
+        <textarea name="content" id="content" cols="30" rows="10" th:text="${postDetail.content}"></textarea>
+        <button type="submit" class="">수정</button>
+    </form>
+</body>
+</html>

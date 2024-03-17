@@ -2,15 +2,12 @@ package com.portfolio.blog.entity;
 
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
 public class Member extends BaseEntity {
 
     @Id
@@ -28,11 +25,4 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    @Builder
-    public Member(String uid, String password, String name, String email) {
-        this.uid = uid;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-    }
 }

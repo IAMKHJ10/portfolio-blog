@@ -2,13 +2,12 @@ package com.portfolio.blog.entity;
 
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Setter
 public class Post extends BaseEntity {
 
     @Id
@@ -22,17 +21,11 @@ public class Post extends BaseEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
-    private int hit;
+    private int hit=0;
 
-    @Builder
-    public Post(String title, String content, int hit) {
-        this.title = title;
-        this.content = content;
-        this.hit = hit;
+    public void update(Post post) {
+        this.title = post.getTitle();
+        this.content = post.getContent();
     }
 
-    public Post updateHits(int hit){
-        this.hit = hit+1;
-        return this;
-    }
 }

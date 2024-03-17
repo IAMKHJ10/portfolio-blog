@@ -1,6 +1,6 @@
 package com.portfolio.blog.controller;
 
-import com.portfolio.blog.dto.PostDto;
+import com.portfolio.blog.entity.Post;
 import com.portfolio.blog.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,24 +16,49 @@ public class PostController {
 
     private final PostService postService;
 
+    //글목록
+    @GetMapping("/post/list")
+    public String list(Model model){
+        model.addAttribute("postList", postService.findAll());
+        return "post/list";
+    }
+
+    //글쓰기 화면
     @GetMapping("/post/write")
-    public String postWriteForm(Model model){
-        model.addAttribute("form", new PostDto());
-        model.addAttribute("postList", postService.postList());
+    public String write(Model model){
+        model.addAttribute("postList", postService.findAll());
         return "post/write";
     }
 
+    //글쓰기
     @PostMapping("/post/write")
-    public String postWrite(@Valid PostDto postDto){
-        postService.postWrite(postDto);
-        return "redirect:/post/write";
+    public String write(@Valid Post post){
+        postService.save(post);
+        return "redirect:/post/list";
     }
 
+
+    //글수정 화면
+    @GetMapping("/post/update/{id}")
+    public String update(@PathVariable(name = "id") Long id, Model model){
+        model.addAttribute("postDetail", postService.findById(id));
+        return "post/update";
+    }
+
+    //글수정
+    @PostMapping("/post/update")
+    public String update(@Valid Post post){
+        postService.update(post);
+        return "redirect:/post/update/"+post.getId();
+    }
+
+    //글 단건 조회
     @GetMapping("/post/{id}")
-    public String postDetail(@PathVariable(name = "id") Long id, Model model){
+    public String findById(@PathVariable(name = "id") Long id, Model model){
         postService.updateHits(id);
         model.addAttribute("postDetail", postService.findById(id));
         return "post/detail";
     }
+
 
 }

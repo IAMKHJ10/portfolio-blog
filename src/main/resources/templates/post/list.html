@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common/header::header"></head>
+<style>
+
+</style>
+<script th:inline="javascript">
+
+</script>
+<body>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>title</th>
+            <th>content</th>
+            <th>hit</th>
+        </tr>
+        <tr th:each="post:${postList}">
+            <td th:text="${post.id}"></td>
+            <td><a th:href="@{|/post/${post.id}|}" th:text="${post.title}"></a></td>
+            <td th:text="${post.content}"></td>
+            <td th:text="${post.hit}"></td>
+            <td th:text="*{#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        </tr>
+    </table>
+
+</body>
+</html>
