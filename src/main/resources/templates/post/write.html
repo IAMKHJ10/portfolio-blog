@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="common/header::header"></head>
+<head th:replace="~{common/header::header}"></head>
 <style>
 
 </style>
 <script th:inline="javascript">
-
+    function write(){
+        $.ajax({
+            url: "/post/write",
+            data: $("#writeForm").serialize(),
+            type: 'POST',
+            success: function(res){
+                if(res.msg=='success'){
+                    alert('글이 등록되었습니다.')
+                    location.href = '/post/list'
+                }
+            }
+        })
+    }
 </script>
 <body>
-    <form action="/post/write" method="post" th:object="${form}">
+    <form id="writeForm">
         제목 : <input type="text" name="title" id="title">
-        내용
-        <textarea name="content" id="content" cols="30" rows="10"></textarea>
-        <button type="submit" class="">등록</button>
+        내용 : <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <button type="button" class="" onclick="write()">등록</button>
     </form>
 </body>
 </html>

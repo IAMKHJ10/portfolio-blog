@@ -22,8 +22,8 @@ public class MemberController {
     // 사용자 등록
     @ResponseBody
     @PostMapping("/member/join")
-    public ResponseEntity<?> save(@ModelAttribute MemberDto member){
-        return memberService.save(member);
+    public ResponseEntity<?> save(@ModelAttribute MemberDto memberDto){
+        return memberService.save(memberDto);
     }
 
 }

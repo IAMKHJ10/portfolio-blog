@@ -1,14 +1,12 @@
 package com.portfolio.blog.controller;
 
-import com.portfolio.blog.entity.Post;
+import com.portfolio.blog.dto.PostDto;
 import com.portfolio.blog.service.PostService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,18 +23,16 @@ public class PostController {
 
     //글쓰기 화면
     @GetMapping("/post/write")
-    public String write(Model model){
-        model.addAttribute("postList", postService.findAll());
+    public String write(){
         return "post/write";
     }
 
     //글쓰기
+    @ResponseBody
     @PostMapping("/post/write")
-    public String write(@Valid Post post){
-        postService.save(post);
-        return "redirect:/post/list";
+    public ResponseEntity<?> write(@ModelAttribute PostDto postDto){
+        return postService.save(postDto);
     }
-
 
     //글수정 화면
     @GetMapping("/post/update/{id}")
@@ -47,9 +43,10 @@ public class PostController {
 
     //글수정
     @PostMapping("/post/update")
-    public String update(@Valid Post post){
-        postService.update(post);
-        return "redirect:/post/update/"+post.getId();
+    @ResponseBody
+    public String update(@ModelAttribute PostDto postDto){
+        postService.update(postDto);
+        return "redirect:/post/update/"+postDto.getId();
     }
 
     //글 단건 조회

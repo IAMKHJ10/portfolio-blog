@@ -1,8 +1,10 @@
 package com.portfolio.blog.entity;
 
+import com.portfolio.blog.dto.PostDto;
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,16 +24,25 @@ public class Post extends BaseEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
-    private int hit=0;
+    private int hit;
 
-    @Enumerated(EnumType.STRING)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    public void update(Post post) {
-        this.title = post.getTitle();
-        this.content = post.getContent();
+    @Builder
+    public Post(String title, String content, int hit) {
+        this.title = title;
+        this.content = content;
+        this.hit = hit;
+    }
+
+    public static Post createPost(PostDto postDto){
+        return Post.builder()
+                .title(postDto.getTitle())
+                .content(postDto.getContent())
+                .hit(0)
+                .build();
     }
 
 }
