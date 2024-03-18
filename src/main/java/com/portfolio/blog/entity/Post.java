@@ -26,10 +26,6 @@ public class Post extends BaseEntity {
 
     private int hit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     @Builder
     public Post(String title, String content, int hit) {
         this.title = title;
