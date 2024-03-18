@@ -1,12 +1,11 @@
 package com.portfolio.blog.controller;
 
-import com.portfolio.blog.entity.Member;
+import com.portfolio.blog.dto.MemberDto;
 import com.portfolio.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,10 +20,10 @@ public class MemberController {
     }
 
     // 사용자 등록
+    @ResponseBody
     @PostMapping("/member/join")
-    public String save(Model model, Member member){
-        model.addAttribute("saveMember", memberService.save(member));
-        return "user/login";
+    public ResponseEntity<?> save(@ModelAttribute MemberDto member){
+        return memberService.save(member);
     }
 
 }
