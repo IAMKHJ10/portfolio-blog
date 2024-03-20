@@ -1,6 +1,6 @@
 package com.portfolio.blog.controller;
 
-import com.portfolio.blog.dto.PostDto;
+import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +14,6 @@ public class PostController {
 
     private final PostService postService;
 
-    //글목록
-    @GetMapping("/post/list")
-    public String list(Model model){
-        model.addAttribute("postList", postService.findAll());
-        return "post/list";
-    }
-
     //글쓰기 화면
     @GetMapping("/post/write")
     public String write(){
@@ -30,8 +23,8 @@ public class PostController {
     //글쓰기
     @ResponseBody
     @PostMapping("/post/write")
-    public ResponseEntity<?> write(@ModelAttribute PostDto postDto){
-        return postService.save(postDto);
+    public ResponseEntity<?> write(@ModelAttribute PostSaveDto dto){
+        return postService.save(dto);
     }
 
     //글수정 화면
@@ -44,16 +37,23 @@ public class PostController {
     //글수정
     @PostMapping("/post/update")
     @ResponseBody
-    public String update(@ModelAttribute PostDto postDto){
-        postService.update(postDto);
-        return "redirect:/post/update/"+postDto.getId();
+    public String update(@ModelAttribute PostSaveDto dto){
+        postService.update(dto);
+        return "redirect:/post/update/"+dto.getId();
+    }
+
+    //글목록
+    @GetMapping("/post/list")
+    public String list(Model model){
+        model.addAttribute("list", postService.findAll());
+        return "post/list";
     }
 
     //글 단건 조회
     @GetMapping("/post/{id}")
     public String findById(@PathVariable(name = "id") Long id, Model model){
         postService.updateHits(id);
-        model.addAttribute("postDetail", postService.findById(id));
+        model.addAttribute("post", postService.findById(id));
         return "post/detail";
     }
 

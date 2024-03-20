@@ -1,4 +1,4 @@
-package com.portfolio.blog.dto;
+package com.portfolio.blog.dto.user;
 
 import lombok.Data;
 

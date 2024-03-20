@@ -1,16 +1,16 @@
 package com.portfolio.blog.entity;
 
-import com.portfolio.blog.dto.PostDto;
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
+@DynamicUpdate
 public class Post extends BaseEntity {
 
     @Id
@@ -18,27 +18,18 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "post_title", nullable = false)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "post_content", nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
+    @Column(name = "post_hit", nullable = false)
     private int hit;
 
-    @Builder
-    public Post(String title, String content, int hit) {
-        this.title = title;
-        this.content = content;
-        this.hit = hit;
-    }
-
-    public static Post createPost(PostDto postDto){
-        return Post.builder()
-                .title(postDto.getTitle())
-                .content(postDto.getContent())
-                .hit(0)
-                .build();
-    }
+    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
 }

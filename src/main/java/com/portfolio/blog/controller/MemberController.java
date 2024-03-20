@@ -1,6 +1,6 @@
 package com.portfolio.blog.controller;
 
-import com.portfolio.blog.dto.MemberDto;
+import com.portfolio.blog.dto.member.MemberSaveDto;
 import com.portfolio.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class MemberController {
     // 사용자 등록
     @ResponseBody
     @PostMapping("/member/join")
-    public ResponseEntity<?> save(@ModelAttribute MemberDto memberDto){
-        return memberService.save(memberDto);
+    public ResponseEntity<?> save(@ModelAttribute MemberSaveDto memberSaveDto){
+        return memberService.save(memberSaveDto);
     }
 
 }

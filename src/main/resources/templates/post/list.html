@@ -8,6 +8,7 @@
 
 </script>
 <body>
+    <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <table>
         <tr>
             <th>id</th>
@@ -15,14 +16,16 @@
             <th>content</th>
             <th>hit</th>
         </tr>
-        <tr th:each="post:${postList}">
+        <tr th:each="post : ${list}">
             <td th:text="${post.id}"></td>
             <td><a th:href="@{|/post/${post.id}|}" th:text="${post.title}"></a></td>
             <td th:text="${post.content}"></td>
             <td th:text="${post.hit}"></td>
-            <td th:text="*{#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="*{#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
     </table>
+
+    <a href="/post/write">글쓰기</a>
 
 </body>
 </html>

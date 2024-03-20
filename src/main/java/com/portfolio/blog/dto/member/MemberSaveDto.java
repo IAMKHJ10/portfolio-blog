@@ -1,11 +1,10 @@
-package com.portfolio.blog.dto;
+package com.portfolio.blog.dto.member;
 
 import com.portfolio.blog.entity.RoleType;
 import lombok.Data;
 
 @Data
-public class MemberDto {
-    private Long id;
+public class MemberSaveDto {
     private String uid;
     private String password;
     private String name;

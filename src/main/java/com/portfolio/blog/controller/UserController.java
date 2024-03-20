@@ -1,6 +1,6 @@
 package com.portfolio.blog.controller;
 
-import com.portfolio.blog.dto.LoginDto;
+import com.portfolio.blog.dto.user.LoginDto;
 import com.portfolio.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

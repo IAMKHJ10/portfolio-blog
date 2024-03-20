@@ -9,20 +9,28 @@
         location.href = "/post/list"
     }
     function update(){
-        location.href = "/post/update/" + [[${postDetail.id}]]
+        location.href = "/post/update/" + [[${post.id}]]
     }
     function del(){
-        location.href = "/post/delete/" + [[${postDetail.id}]]
+        location.href = "/post/delete/" + [[${post.id}]]
     }
 </script>
 <body>
-    <div th:text="|글번호 : ${postDetail.id}번|"></div>
-    <div th:text="|제목 : ${postDetail.title}|"></div>
-    <div th:text="|내용 : ${postDetail.content}|"></div>
-    <div th:text="|조회수 : ${postDetail.hit}|"></div>
-    <div th:text="|작성일 : *{#temporals.format(postDetail.createdDate, 'yy-MM-dd')}|"></div>
-    <button onclick="list()" type="button" class="">목록</button>
-    <button onclick="update()" type="button" class="">수정</button>
-    <button onclick="del()" type="button" class="">삭제</button>
+    <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
+    <h1 th:text="${post.title}"></h1>
+    <div>
+        <div>글번호 : <span th:text="${post.id}"></span></div>
+        <div>등록 일시 : <span th:text="*{#temporals.format(post.createdDate, 'yy-MM-dd HH:mm')}"></span></div>
+        <div>수정 일시 : <span th:text="*{#temporals.format(post.lastModifiedDate, 'yy-MM-dd HH:mm')}"></span></div>
+        <div>작성자 : <span th:text="${post.memberName}"></span></div>
+        <div>조회수 : <span th:text="${post.hit}"></span></div>
+        <div>글 내용</div>
+        <div th:text="${post.content}"></div>
+    </div>
+    <div>
+        <button onclick="list()" type="button" class="">목록</button>
+        <button onclick="update()" type="button" class="">수정</button>
+        <button onclick="del()" type="button" class="">삭제</button>
+    </div>
 </body>
 </html>

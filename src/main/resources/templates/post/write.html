@@ -14,16 +14,27 @@
                 if(res.msg=='success'){
                     alert('글이 등록되었습니다.')
                     location.href = '/post/list'
+                }else if(res.msg=='fail'){
+                    alert('글등록 실패')
                 }
             }
         })
     }
 </script>
 <body>
+    <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <form id="writeForm">
-        제목 : <input type="text" name="title" id="title">
-        내용 : <textarea name="content" id="content" cols="30" rows="10"></textarea>
-        <button type="button" class="" onclick="save()">등록</button>
+        <div>
+            <h2>새 글 작성</h2>
+            <div>
+                <input type="text" name="title" id="" placeholder="제목">
+                <input type="text" name="memberId" id="" placeholder="회원아이디" value="a">
+            </div>
+            <div>
+                <textarea name="content" id="" cols="50" rows="10" placeholder="내용"></textarea>
+            </div>
+            <button type="button" class="" onclick="save()">등록</button>
+        </div>
     </form>
 </body>
 </html>

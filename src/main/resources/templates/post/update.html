@@ -8,6 +8,7 @@
 
 </script>
 <body>
+    <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <form action="/post/update" method="post" th:object="${form}">
         <input type="hidden" name="id" th:value="${postDetail.id}">
         제목 : <input type="text" name="title" id="title" th:value="${postDetail.title}">

@@ -1,17 +1,16 @@
 package com.portfolio.blog.entity;
 
-import com.portfolio.blog.dto.MemberDto;
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
+@DynamicUpdate
 public class Member extends BaseEntity {
 
     @Id
@@ -19,36 +18,20 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "member_uid", length = 20, nullable = false, unique = true)
     private String uid;
 
+    @Column(name = "member_password")
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "member_name", nullable = false)
     private String name;
 
+    @Column(name = "member_email")
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "member_role", nullable = false)
     private RoleType roleType;
 
-    @Builder
-    public Member(String uid, String password, String name, String email, RoleType roleType) {
-        this.uid = uid;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.roleType = roleType;
-    }
-
-    public static Member createMember(MemberDto dto, PasswordEncoder passwordEncoder){
-        return Member.builder()
-                .uid(dto.getUid())
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .roleType(RoleType.USER)
-                .build();
-    }
 }
