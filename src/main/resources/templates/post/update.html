@@ -5,16 +5,35 @@
 
 </style>
 <script th:inline="javascript">
-
+    function update(){
+        $.ajax({
+            url: "/post/update/"+[[${post.id}]],
+            data: $("#updateForm").serialize(),
+            type: 'PATCH',
+            success: function(res){
+                if(res.msg=='success'){
+                console.log(res)
+                    alert('글이 수정되었습니다.')
+                    location.href = '/post/'+res.data;
+                }
+            }
+        })
+    }
 </script>
 <body>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
-    <form action="/post/update" method="post" th:object="${form}">
-        <input type="hidden" name="id" th:value="${postDetail.id}">
-        제목 : <input type="text" name="title" id="title" th:value="${postDetail.title}">
-        내용
-        <textarea name="content" id="content" cols="30" rows="10" th:text="${postDetail.content}"></textarea>
-        <button type="submit" class="">수정</button>
+    <form id="updateForm">
+        <input type="hidden" name="id" th:value="${post.id}">
+        <div>
+            <h2>글 수정</h2>
+            <div>
+                <input type="text" name="title" th:value="${post.title}">
+            </div>
+            <div>
+                <textarea name="content" cols="50" rows="10"  th:text="${post.content}"></textarea>
+            </div>
+            <button type="button" class="" onclick="update()">수정</button>
+        </div>
     </form>
 </body>
 </html>

@@ -1,15 +1,14 @@
 package com.portfolio.blog.service;
 
-import com.portfolio.blog.dto.common.MessageDto;
 import com.portfolio.blog.dto.post.PostDetailDto;
 import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
+import com.portfolio.blog.dto.post.PostUpdateDto;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.entity.Post;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,38 +24,32 @@ public class PostService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public ResponseEntity<?> save(PostSaveDto postSaveDto) {
+    public void save(PostSaveDto dto) {
 
-        Optional<Member> member = memberRepository.findByUid(postSaveDto.getMemberId());
+        Optional<Member> member = memberRepository.findByUid(dto.getMemberId());
 
         if(member.isPresent()){
             Member memberEntity = member.get();
 
             Post newPost = Post.builder()
-                    .title(postSaveDto.getTitle())
-                    .content(postSaveDto.getContent())
-                    .hit(0)
+                    .title(dto.getTitle())
+                    .content(dto.getContent())
                     .member(memberEntity)
                     .build();
 
             postRepository.save(newPost);
 
-            return ResponseEntity.ok().body(new MessageDto<>("success", ""));
         }else{
-            return ResponseEntity.ok().body(new MessageDto<>("fail", ""));
         }
     }
 
     @Transactional
-    public ResponseEntity<?> update(PostSaveDto postDto) {
-        Post findPost = postRepository.findById(postDto.getId())
+    public void update(Long id, PostUpdateDto dto) {
+        Post post = postRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
-        Post.builder()
-                .title(postDto.getTitle())
-                .content(postDto.getContent())
-                .build();
-        return ResponseEntity.ok().body(new MessageDto<>("success", ""));
+        post.update(dto);
+
     }
 
     @Transactional(readOnly = true)
@@ -94,8 +87,15 @@ public class PostService {
                 .hit(post.getHit())
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
+                .memberId(member.getUid())
                 .memberName(member.getName())
                 .build();
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        postRepository.deleteById(id);
+
     }
 
     @Transactional

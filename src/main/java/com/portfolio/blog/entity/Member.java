@@ -1,6 +1,7 @@
 package com.portfolio.blog.entity;
 
 import com.portfolio.blog.entity.common.BaseEntity;
+import com.portfolio.blog.entity.common.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;

@@ -35,7 +35,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath password = createString("password");
 
-    public final EnumPath<RoleType> roleType = createEnum("roleType", RoleType.class);
+    public final EnumPath<com.portfolio.blog.entity.common.RoleType> roleType = createEnum("roleType", com.portfolio.blog.entity.common.RoleType.class);
 
     public final StringPath uid = createString("uid");
 

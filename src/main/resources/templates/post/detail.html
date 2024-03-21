@@ -12,7 +12,16 @@
         location.href = "/post/update/" + [[${post.id}]]
     }
     function del(){
-        location.href = "/post/delete/" + [[${post.id}]]
+        $.ajax({
+            url: "/post/delete/"+[[${post.id}]],
+            type: 'DELETE',
+            success: function(res){
+                if(res.msg=='success'){
+                    alert('글이 삭제되었습니다.')
+                    location.href = '/post/list'
+                }
+            }
+        })
     }
 </script>
 <body>

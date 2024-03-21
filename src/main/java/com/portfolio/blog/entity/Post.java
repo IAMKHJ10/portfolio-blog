@@ -1,9 +1,16 @@
 package com.portfolio.blog.entity;
 
+import com.portfolio.blog.dto.post.PostUpdateDto;
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -25,11 +32,23 @@ public class Post extends BaseEntity {
     private String content;
 
     @Column(name = "post_hit", nullable = false)
+    @ColumnDefault("0")
     private int hit;
 
-    @Enumerated(EnumType.STRING)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    public void update(PostUpdateDto dto) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+    }
 
 }

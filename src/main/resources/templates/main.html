@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{common/header::header}"></head>
 <style>
-    .hb{background: url(img/main_bg.jpg);position: absolute;z-index: -1;height: 550px;width: 100%;opacity: 0.9;}
+    .hb{background: url(images/main_bg.jpg);position: absolute;z-index: -1;height: 550px;width: 100%;opacity: 0.9;}
     .t{width:1000px;margin:0 auto;padding-top:180px;}
     .line{border-bottom: 2px solid;color: #000;}
     .desc{margin-top: 25px;text-align: center;color: rgba(0,0,0,.8);font-size: 45px;}
@@ -22,10 +22,20 @@
     .post_list>li>a>.post_date{position: absolute;left: 5px;bottom: 10px;color:#333;text-align: right;padding:0 10px;font-size: 14px;}
     .more{text-align: center;margin: 100px 0;}
 </style>
-<script>
+<script th:inline="javascript">
 
 </script>
 <body>
+    <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
+    <div sec:authorize="isAuthenticated()">인증 하면보임</div>
+    <div sec:authorize="isAnonymous()">인증 안하면 보임</div>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">어드민</div>
+    <div sec:authorize="hasRole('ROLE_USER')">유저</div>
+
+    <p th:text="${#authentication.name}"></p>
+    <p th:text="${#authentication.authorities}"></p>
+    <p th:text="${#authentication.authenticated}"></p>
+
     <div class="hb"></div>
     <div class="t">
         <div class="eng">BLOG<span class="ko">블로그</span></div>
@@ -41,7 +51,7 @@
         <ul class="post_list">
             <li th:each="post:${list}">
                 <a th:href="@{/post/{id}(id = ${post.id})}">
-                    <div><img src="img/main_bg.jpg" alt=""></div>
+                    <div><img src="images/main_bg.jpg" alt=""></div>
                     <div class="post_title" th:text="${post.title}"></div>
                     <div class="post_desc" th:text="${post.content}"></div>
                     <div class="post_date" th:text="*{#temporals.format(post.createdDate, 'yy.MM.dd')}"></div>

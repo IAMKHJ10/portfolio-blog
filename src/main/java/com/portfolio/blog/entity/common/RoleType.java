@@ -1,4 +1,4 @@
-package com.portfolio.blog.entity;
+package com.portfolio.blog.entity.common;
 
 
 public enum RoleType {

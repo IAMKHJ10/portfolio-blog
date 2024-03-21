@@ -12,15 +12,17 @@
     .join_form{width:400px;margin:20px auto 0;}
     .join_form>a{font-size: 13px;color: #191919;text-decoration: none;padding-left: 7px;}
 </style>
-<script>
+<script th:inline="javascript">
     function login(){
         $.ajax({
             url: "/user/login",
             data: $("#loginForm").serialize(),
             type: 'POST',
+            beforeSend: function(xhr){
+                xhr.setRequestHeader(header, token);
+            },
             success: function(res){
                 if(res.msg=='success'){
-                    localStorage.setItem('id', $('#loginId').val());
                     location.href = '/'
                 }else if(res.msg=='noMember'){
                     alert('존재하지 않는 회원입니다.')
@@ -32,6 +34,7 @@
     }
 </script>
 <body>
+    <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <div class="all">
         <form id="loginForm">

@@ -12,7 +12,8 @@ public class PostDetailDto {
     private String title;
     private String content;
     private int hit;
-    private String memberName;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
+    private String memberId;
+    private String memberName;
 }

@@ -1,13 +1,17 @@
 package com.portfolio.blog.config;
 
+import com.portfolio.blog.entity.common.RoleType;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -19,20 +23,45 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName("_csrf");
+
         return http
-                .csrf(AbstractHttpConfigurer::disable)
-                // 특정 URL에 대한 권한 설정.
-                .authorizeHttpRequests((authorizeRequests) -> {
-                    authorizeRequests.requestMatchers("/admin/**")
-                            // ROLE_은 붙이면 안 된다. hasRole()을 사용할 때 자동으로 ROLE_이 붙기 때문이다.
-                            .hasRole("ADMIN");
-                    authorizeRequests.anyRequest().permitAll();
-                })
-                .formLogin((formLogin) -> {
-                    // 권한이 필요한 요청은 해당 url로 리다이렉트
-                    formLogin.loginPage("/login");
-                })
+                .csrf(csrf -> csrf
+                        .csrfTokenRequestHandler(requestHandler)
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers("/", "/login/", "/logout/")
+                )
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/", "/login", "/member/join", "/post/list").permitAll()
+                        .requestMatchers("/admin/**").hasRole(RoleType.ADMIN.name())
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/user/login")
+                        .usernameParameter("uid")
+                        .defaultSuccessUrl("/")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
+                )
+                .sessionManagement(session -> session
+                        .invalidSessionUrl("/login")
+                )
+
                 .build();
     }
 
