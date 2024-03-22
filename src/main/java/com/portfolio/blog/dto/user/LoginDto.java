@@ -1,8 +1,10 @@
 package com.portfolio.blog.dto.user;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class LoginDto {
     private String uid;
     private String password;

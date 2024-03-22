@@ -11,22 +11,30 @@
     .login_btn{margin: 20px 0 0;width: 100%;height: 48px;border-radius: 3px;font-size: 16px;color: #fff;background-color: #000;border: 0;}
     .join_form{width:400px;margin:20px auto 0;}
     .join_form>a{font-size: 13px;color: #191919;text-decoration: none;padding-left: 7px;}
+    .login_error{padding-left:20px;color:red;font-size:13px;}
 </style>
 <script th:inline="javascript">
     function login(){
+
+        if($("#uid").val()==''){
+            alert('아이디를 입력하세요.')
+            return false
+        }
+        if($("#password").val()==''){
+            alert('비밀번호를 입력하세요.')
+            return false
+        }
+
         $.ajax({
-            url: "/user/login",
+            url: "/login",
             data: $("#loginForm").serialize(),
             type: 'POST',
-            beforeSend: function(xhr){
-                xhr.setRequestHeader(header, token);
-            },
             success: function(res){
-                if(res.msg=='success'){
+                if(res.key=='ok'){
                     location.href = '/'
-                }else if(res.msg=='noMember'){
+                }else if(res.key=='noMember'){
                     alert('존재하지 않는 회원입니다.')
-                }else if(res.msg=='differPw'){
+                }else if(res.key=='differPw'){
                     alert('비밀번호가 일치하지 않습니다.')
                 }
             }
@@ -34,7 +42,6 @@
     }
 </script>
 <body>
-    <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <div class="all">
         <form id="loginForm">
@@ -42,17 +49,17 @@
                 <div class="l_title">BLOG</div>
                 <div class="login_box">
                     <div class="input_form">
-                        <input type="text" id="loginId" name="uid" placeholder="ID" required>
+                        <input type="text" id="uid" name="uid" placeholder="ID">
                     </div>
                     <div class="input_form password">
-                        <input type="password" id="loginPw" name="password" placeholder="Password" required>
+                        <input type="password" id="password" name="password" placeholder="Password">
                     </div>
                 </div>
                 <button type="button" class="login_btn" onclick="login()">로그인</button>
             </div>
         </form>
         <div class="join_form">
-            <a href="/member/join">회원가입</a>
+            <a href="/join">회원가입</a>
         </div>
     </div>
 </body>

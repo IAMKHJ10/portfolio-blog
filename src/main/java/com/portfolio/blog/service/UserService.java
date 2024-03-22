@@ -1,47 +1,43 @@
 package com.portfolio.blog.service;
 
+import com.portfolio.blog.dto.MessageDto;
+import com.portfolio.blog.dto.user.LoginDto;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+import static com.portfolio.blog.config.SecurityConfig.passwordEncoder;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final MemberRepository memberRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
-        Member member = memberRepository.findByUid(uid)
-                .orElseThrow(() -> new IllegalArgumentException("ㅇㅇㅇㅇ"));
+    @Transactional
+    public MessageDto<?> login(LoginDto dto){
 
-        return User.builder()
-                .username(member.getUid())
-                .password(member.getPassword())
-                .build();
-    }
-/*
-    @Transactional(readOnly = true)
-    public ResponseEntity<?> login(LoginDto loginDto){
+        Optional<Member> member = memberRepository.findByUid(dto.getUid());
 
-        Optional<Member> member = memberRepository.findByUid(loginDto.getUid());
-        Member memberEntity = member.orElse(null);
-
-        if(member.isEmpty()){ // 회원 유무 체크
-            return ResponseEntity.ok().body(new MessageDto<>("noMember", ""));
+        if(member.isEmpty()){ // 회원 없으면
+            return new MessageDto<>("noMember");
         }
 
-        if (passwordEncoder.matches(loginDto.getPassword(), memberEntity.getPassword())) { // 비밀번호 체크
-            return ResponseEntity.ok().body(new MessageDto<>("success", ""));
-        } else {
-            return ResponseEntity.ok().body(new MessageDto<>("differPw", ""));
+        if(passwordEncoder().matches(dto.getPassword(), member.get().getPassword())){ // 비밀번호 맞으면
+            Member loginMember = Member.builder()
+                    .uid(member.get().getUid())
+                    .name(member.get().getName())
+                    .email(member.get().getEmail())
+                    .roleType(member.get().getRoleType())
+                    .build();
+            return new MessageDto<>("ok", loginMember);
         }
 
+        return new MessageDto<>("differPw");
     }
- */
+
 }

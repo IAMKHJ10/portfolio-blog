@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="bodyUtil">
-    <script th:inline="javascript">
-        const header = $("meta[name='_csrf_header']").attr('content');
-        const token = $("meta[name='_csrf']").attr('content');
-    </script>
-    <form action="/logout" method="post">
-        <input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-        <button type="submit">로그아웃</button>
-    </form>
+<div th:fragment="bodyUtil" class="authWrap">
+    <style>
+        .authWrap{width:0;height:0;}
+        .auth{position:absolute;right:15px;top:15px;border-radius: 5px;text-decoration-line: none;color:#000;font-weight: bold;background-color: #fff;padding: 5px 15px;font-size: 15px;}
+        .auth:hover{background: #000;color:#fff;}
+    </style>
+    <a class="auth" href="/login" th:if="${session.USER==null}">로그인</a>
+    <a class="auth" href="/logout" th:if="${session.USER!=null}">로그아웃</a>
 </div>
