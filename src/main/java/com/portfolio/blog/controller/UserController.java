@@ -18,7 +18,11 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String login(){
+    public String login(HttpSession session){
+
+        if(session.getAttribute("USER")!=null){
+            return "redirect:/";
+        }
 
         return "user/login";
     }
@@ -28,10 +32,10 @@ public class UserController {
     public MessageDto<?> login(@ModelAttribute LoginDto loginDto, HttpSession session){
 
         MessageDto<?> result = userService.login(loginDto);
-        if(result.getKey().equals("ok")){
-            session.setAttribute("USER", result);
-            session.setMaxInactiveInterval(60*60); // 1시간
 
+        if(result.getKey().equals("ok")){
+            session.setAttribute("USER", result.getData());
+            session.setMaxInactiveInterval(60*60); // 1시간
         }
 
         return result;
@@ -40,7 +44,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
-        return "user/login";
+        return "redirect:/user/login";
     }
 
 }

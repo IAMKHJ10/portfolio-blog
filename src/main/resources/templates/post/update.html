@@ -11,10 +11,9 @@
             data: $("#updateForm").serialize(),
             type: 'PATCH',
             success: function(res){
-                if(res.msg=='success'){
-                console.log(res)
+                if(res.key=='ok'){
                     alert('글이 수정되었습니다.')
-                    location.href = '/post/'+res.data;
+                    location.href = '/post/detail/'+res.data;
                 }
             }
         })

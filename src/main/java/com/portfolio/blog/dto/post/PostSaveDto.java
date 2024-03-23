@@ -1,12 +1,13 @@
 package com.portfolio.blog.dto.post;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PostSaveDto {
     private Long id;
     private String title;
     private String content;
-    private String memberId;
-    private String categoryId;
+    private Long memberId;
 }

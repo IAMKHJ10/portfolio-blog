@@ -1,7 +1,9 @@
 package com.portfolio.blog.controller;
 
+import com.portfolio.blog.dto.MessageDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.dto.post.PostUpdateDto;
+import com.portfolio.blog.service.CommentService;
 import com.portfolio.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     //글 쓰기 화면
     @GetMapping("/post/write")
@@ -23,8 +26,8 @@ public class PostController {
     //글 쓰기
     @ResponseBody
     @PostMapping("/post/save")
-    public void save(@ModelAttribute PostSaveDto dto){
-        postService.save(dto);
+    public MessageDto<?> save(@ModelAttribute PostSaveDto dto){
+        return postService.save(dto);
     }
 
     //글 수정 화면
@@ -37,8 +40,9 @@ public class PostController {
     //글 수정
     @ResponseBody
     @PatchMapping("/post/update/{id}")
-    public void update(@PathVariable(name = "id") Long id, @ModelAttribute PostUpdateDto dto){
-        postService.update(id, dto);
+    public MessageDto<?> update(@PathVariable(name = "id") Long id, @ModelAttribute PostUpdateDto dto){
+
+        return postService.update(id, dto);
     }
 
     //글 목록
@@ -49,18 +53,19 @@ public class PostController {
     }
 
     //글 단건 조회
-    @GetMapping("/post/{id}")
+    @GetMapping("/post/detail/{id}")
     public String findById(@PathVariable(name = "id") Long id, Model model){
         postService.updateHits(id);
         model.addAttribute("post", postService.findById(id));
+        model.addAttribute("commentList", commentService.findAllByPost(id));
         return "post/detail";
     }
 
     //글 삭제
     @ResponseBody
     @DeleteMapping("/post/delete/{id}")
-    public void delete(@PathVariable(name = "id") Long id){
-        postService.delete(id);
+    public MessageDto<?> delete(@PathVariable(name = "id") Long id){
+        return postService.delete(id);
     }
 
 }

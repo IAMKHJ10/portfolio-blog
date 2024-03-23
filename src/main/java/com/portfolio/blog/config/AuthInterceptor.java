@@ -14,10 +14,12 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        log.debug("==================== START ====================");
-        log.debug(" Request URI : " + request.getRequestURI());
+        log.info("==================== START ====================");
+        log.info("===============================================");
+        log.info(" Request URI : " + request.getRequestURI());
 
         HttpSession session = request.getSession();
+        String url = request.getRequestURL().toString();
         Object user = session.getAttribute("USER");
 
         if(user==null){
@@ -30,7 +32,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.debug("==================== END ====================");
+        log.info("===============================================");
+        log.info("==================== END ======================");
     }
 
 }

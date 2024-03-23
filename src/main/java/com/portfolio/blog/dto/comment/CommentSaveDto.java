@@ -1,12 +1,13 @@
 package com.portfolio.blog.dto.comment;
 
-import com.portfolio.blog.entity.Member;
-import com.portfolio.blog.entity.Post;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class CommentSaveDto {
     private String content;
-    private Member member;
-    private Post post;
+    private Long parentId;
+    private Long memberId;
+    private Long postId;
 }

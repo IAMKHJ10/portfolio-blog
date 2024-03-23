@@ -1,10 +1,9 @@
 package com.portfolio.blog.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -17,8 +16,5 @@ public class Category {
 
     @Column(name = "category_name")
     private String name;
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private final List<Post> post = new ArrayList<>();
 
 }

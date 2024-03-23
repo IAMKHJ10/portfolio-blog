@@ -29,6 +29,7 @@ public class UserService {
 
         if(passwordEncoder().matches(dto.getPassword(), member.get().getPassword())){ // 비밀번호 맞으면
             Member loginMember = Member.builder()
+                    .id(member.get().getId())
                     .uid(member.get().getUid())
                     .name(member.get().getName())
                     .email(member.get().getEmail())

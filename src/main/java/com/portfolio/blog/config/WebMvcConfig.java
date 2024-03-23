@@ -13,11 +13,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        // 적힌곳만 인터셉터 작동
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/post/delete");
-
-        WebMvcConfigurer.super.addInterceptors(registry);
+                .addPathPatterns("/**")
+                .excludePathPatterns("/css/**", "/js/**", "/images/**")
+                .excludePathPatterns("/", "/login", "/join")
+                .excludePathPatterns("/post/list", "/post/detail");
     }
 }

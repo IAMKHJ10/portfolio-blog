@@ -1,5 +1,6 @@
 package com.portfolio.blog.service;
 
+import com.portfolio.blog.dto.MessageDto;
 import com.portfolio.blog.dto.post.PostDetailDto;
 import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
@@ -24,11 +25,11 @@ public class PostService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void save(PostSaveDto dto) {
+    public MessageDto<?> save(PostSaveDto dto) {
 
-        Optional<Member> member = memberRepository.findByUid(dto.getMemberId());
+        Optional<Member> member = memberRepository.findById(dto.getMemberId());
 
-        if(member.isPresent()){
+        if(member.isPresent()){ // 글쓴이 정보가 있으면
             Member memberEntity = member.get();
 
             Post newPost = Post.builder()
@@ -38,18 +39,20 @@ public class PostService {
                     .build();
 
             postRepository.save(newPost);
-
-        }else{
+            return new MessageDto<>("ok");
+        }else{ // 글쓴이가 삭제된 상태
+            return new MessageDto<>("no");
         }
     }
 
     @Transactional
-    public void update(Long id, PostUpdateDto dto) {
+    public MessageDto<?> update(Long id, PostUpdateDto dto) {
         Post post = postRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
         post.update(dto);
 
+        return new MessageDto<>("ok", post.getId());
     }
 
     @Transactional(readOnly = true)
@@ -87,15 +90,14 @@ public class PostService {
                 .hit(post.getHit())
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
-                .memberId(member.getUid())
                 .memberName(member.getName())
                 .build();
     }
 
     @Transactional
-    public void delete(Long id) {
+    public MessageDto<?> delete(Long id) {
         postRepository.deleteById(id);
-
+        return new MessageDto<>("ok");
     }
 
     @Transactional

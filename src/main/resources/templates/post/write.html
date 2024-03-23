@@ -7,31 +7,37 @@
 <script th:inline="javascript">
     function save(){
         $.ajax({
-            url: "/post/write",
+            url: "/post/save",
             data: $("#writeForm").serialize(),
             type: 'POST',
             success: function(res){
-                if(res.msg=='success'){
+                if(res.key=='ok'){
                     alert('글이 등록되었습니다.')
                     location.href = '/post/list'
-                }else if(res.msg=='fail'){
-                    alert('글등록 실패')
+                }else if(res.key=='no'){
+                    alert('회원정보가 없습니다.')
+                    location.href = '/login'
+                }else {
+                    alert('등록을 실패하였습니다.')
+                    location.href = '/post/list'
                 }
             }
         })
     }
 </script>
 <body>
+    <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <form id="writeForm">
+        <input type="hidden" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
         <div>
             <h2>새 글 작성</h2>
             <div>
-                <input type="text" name="title" id="" placeholder="제목">
-                <input type="text" name="memberId" id="" placeholder="회원아이디" value="a">
+                <input type="text" name="title" placeholder="제목">
+                <input type="text" readonly th:if="${session.USER != null}" th:value="${session.USER.name}">
             </div>
             <div>
-                <textarea name="content" id="" cols="50" rows="10" placeholder="내용"></textarea>
+                <textarea name="content" cols="50" rows="10" placeholder="내용"></textarea>
             </div>
             <button type="button" class="" onclick="save()">등록</button>
         </div>

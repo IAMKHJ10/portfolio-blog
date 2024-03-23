@@ -3,6 +3,7 @@ package com.portfolio.blog.controller;
 import com.portfolio.blog.dto.MessageDto;
 import com.portfolio.blog.dto.member.MemberSaveDto;
 import com.portfolio.blog.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,11 @@ public class MemberController {
 
     // 회원가입 view
     @GetMapping("/join")
-    public String save(){
+    public String save(HttpSession session){
+
+        if(session.getAttribute("USER")!=null){
+            return "redirect:/";
+        }
 
         return "member/join";
     }

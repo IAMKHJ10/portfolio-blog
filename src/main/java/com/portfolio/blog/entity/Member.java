@@ -35,4 +35,6 @@ public class Member extends BaseEntity {
     @Column(name = "member_role", nullable = false)
     private RoleType roleType;
 
+
+
 }
