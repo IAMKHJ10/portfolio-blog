@@ -6,6 +6,16 @@
 </style>
 <script th:inline="javascript">
     function save(){
+
+         if($("#title").val()==''){
+            alert('제목을 입력하세요.')
+            return false
+        }
+        if($("#content").val()==''){
+            alert('내용을 입력하세요.')
+            return false
+        }
+
         $.ajax({
             url: "/post/save",
             data: $("#writeForm").serialize(),
@@ -33,11 +43,11 @@
         <div>
             <h2>새 글 작성</h2>
             <div>
-                <input type="text" name="title" placeholder="제목">
+                <input type="text" id="title" name="title" placeholder="제목">
                 <input type="text" readonly th:if="${session.USER != null}" th:value="${session.USER.name}">
             </div>
             <div>
-                <textarea name="content" cols="50" rows="10" placeholder="내용"></textarea>
+                <textarea id="content" name="content" cols="50" rows="10" placeholder="내용"></textarea>
             </div>
             <button type="button" class="" onclick="save()">등록</button>
         </div>

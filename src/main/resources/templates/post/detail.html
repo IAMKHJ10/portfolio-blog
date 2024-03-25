@@ -2,7 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{common/header::header}"></head>
 <style>
-
+    *{font-family: -apple-system;}
+    .t{width:768px;margin:0 auto;margin-top: 160px;}
+    .c{width:768px;margin:0 auto;}
+    .t_title{font-size:48px;color:#212529;line-height: 1.5;font-weight: 800;margin-bottom:32px;}
+    .t_name{font-size:16px;color:#212529;font-weight: bold;}
+    .t_date{color:#495057;}
+    .t_hit{float: right;}
+    .c_con{margin:80px 0;line-height: 1.7;color:#212529;font-size:18px;min-height: 350px;}
+    .detail_btn{text-align: center;font-size:15px;}
+    .detail_btn>button{border: 0;background-color:#0a0a0a;color:#fff;margin:0 15px;border-radius: 5px;padding: 5px 15px;}
+    .comment{width:768px;margin:160px auto;}
+    .comment_count{border-top: 1px solid #dbdbdb;padding-top: 5rem;font-size: 1.125rem;line-height: 1.5;font-weight: 600;margin-bottom: 1rem;}
+    .comment_content{resize: none;width: 100%;height:100px;border: 1px solid #F1F3F5;padding: 16px 16px 24px;border-radius: 4px;color:#212529;margin-bottom:24px;}
+    .comment_save_btn{border:0;background-color:#0a0a0a;color:#fff;border-radius: 4px;font-size: 16px;font-weight: bold;float: right;padding: 4px 20px;}
 </style>
 <script th:inline="javascript">
     function list(){
@@ -62,35 +75,45 @@
     }
 </script>
 <body>
+    <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
-    <h1 th:text="${post.title}"></h1>
-    <div>
-        <div>글번호 : <span th:text="${post.id}"></span></div>
-        <div>등록 일시 : <span th:text="*{#temporals.format(post.createdDate, 'yy-MM-dd HH:mm')}"></span></div>
-        <div>수정 일시 : <span th:text="*{#temporals.format(post.lastModifiedDate, 'yy-MM-dd HH:mm')}"></span></div>
-        <div>작성자 : <span th:text="${post.memberName}"></span></div>
-        <div>조회수 : <span th:text="${post.hit}"></span></div>
-        <div>글 내용</div>
-        <div th:text="${post.content}"></div>
+
+    <div class="t">
+        <div class="t_con">
+            <div class="t_title" th:text="${post.title}"></div>
+            <span class="t_name" th:text="${post.memberName}"></span>
+            <span class="separator">·</span>
+            <span class="t_date" th:text="*{#temporals.format(post.createdDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>
+            <span class="t_hit">조회수 <span th:text="${post.hit}"></span></span>
+        </div>
     </div>
-    <div>
+    <div class="c">
+        <div class="c_con" th:text="${post.content}"></div>
+    </div>
+
+    <div class="detail_btn">
         <button onclick="list()" type="button" class="">목록</button>
         <button onclick="update()" type="button" class="">수정</button>
         <button onclick="del()" type="button" class="">삭제</button>
     </div>
 
-
-    <div>
-        <h1>새 댓글 등록</h1>
-        <form id="commentForm">
-            <input type="hidden" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
-            <input type="hidden" name="postId" th:if="${post.id != null}" th:value="${post.id}">
-            <div>
-                <textarea name="content" cols="50" rows="5" placeholder="내용"></textarea>
-            </div>
-            <button type="button" class="" onclick="commentSave()">등록</button>
-        </form>
+    <div class="comment">
+        <h4 class="comment_count">
+            <span th:text="|${commentList.size == 0 ? 0 : commentList.size}개의 댓글|"></span>
+        </h4>
+        <div class="comment_form">
+            <form id="commentForm">
+                <input type="hidden" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
+                <input type="hidden" name="postId" th:if="${post.id != null}" th:value="${post.id}">
+                <div>
+                    <textarea class="comment_content" name="content" placeholder="댓글을 작성하세요"></textarea>
+                </div>
+                <button type="button" class="comment_save_btn" onclick="commentSave()">댓글 등록</button>
+            </form>
+        </div>
     </div>
+
+
     <div>
         <div th:each="comment:${commentList}">
             <div class="" th:text="|글 번호 : ${comment.postId}|"></div>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{common/header::header}"></head>
 <style>
-    .hb{background: url(images/main_bg.jpg);position: absolute;z-index: -1;height: 550px;width: 100%;opacity: 0.9;}
+    .hb{background: url(/images/main_bg.jpg);position: absolute;z-index: -1;height: 550px;width: 100%;opacity: 0.9;}
     .t{width:1000px;margin:0 auto;padding-top:180px;}
     .line{border-bottom: 2px solid;color: #000;}
     .desc{margin-top: 25px;text-align: center;color: rgba(0,0,0,.8);font-size: 45px;}
@@ -46,8 +46,8 @@
         <div th:if="${#lists.size(list) == 0}" class="c_desc">등록된 글이 없습니다.</div>
         <ul class="post_list">
             <li th:each="post:${list}">
-                <a th:href="@{/post/{id}(id = ${post.id})}">
-                    <div><img src="images/main_bg.jpg" alt=""></div>
+                <a th:href="@{/post/detail/{id}(id = ${post.id})}">
+                    <div><img src="/images/main_bg.jpg" alt=""></div>
                     <div class="post_title" th:text="${post.title}"></div>
                     <div class="post_desc" th:text="${post.content}"></div>
                     <div class="post_date" th:text="*{#temporals.format(post.createdDate, 'yy.MM.dd')}"></div>
