@@ -90,6 +90,7 @@ public class PostService {
                 .hit(post.getHit())
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
+                .memberId(member.getId())
                 .memberName(member.getName())
                 .build();
     }

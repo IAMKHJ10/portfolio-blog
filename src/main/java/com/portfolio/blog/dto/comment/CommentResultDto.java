@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 public class CommentResultDto {
     private Long id;
     private String content;
+    private Long parentId;
+    private Long memberId;
+    private String memberName;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }

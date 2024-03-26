@@ -18,7 +18,7 @@
     .post_list>li>a{text-decoration-line: none;text-align: center;}
     .post_list>li>a>div>img{width: 100%;height: 180px;padding: 10px 10px;border-radius: 15px;}
     .post_list>li>a>.post_title{font-weight: bold;color:#000;font-size: 17px;width:100%;padding:0 20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .post_list>li>a>.post_desc{margin-top: 5px;color:#000;font-size: 13px;padding:0 10px;white-space: normal;overflow: hidden;display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+    .post_list>li>a>.post_desc{margin-top: 5px;color:#000;font-size: 13px;margin:5px 10px;white-space: normal;overflow: hidden;display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
     .post_list>li>a>.post_date{position: absolute;left: 5px;bottom: 10px;color:#333;text-align: right;padding:0 10px;font-size: 14px;}
     .authWrap{width:0;height:0;}
     .auth{position:absolute;right:15px;top:15px;border-radius: 5px;text-decoration-line: none;color:#000;font-weight: bold;background-color: #fff;padding: 5px 15px;font-size: 15px;}
@@ -28,9 +28,7 @@
 
 </script>
 <body>
-    <div class="authWrap" th:if="${session.USER!=null}">
-        <a class="auth" href="/logout" th:if="${session.USER!=null}">로그아웃</a>
-    </div>
+    <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div class="hb"></div>
     <div class="t">
         <div class="eng">BLOG<span class="ko">블로그</span></div>

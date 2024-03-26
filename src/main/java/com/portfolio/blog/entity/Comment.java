@@ -1,11 +1,10 @@
 package com.portfolio.blog.entity;
 
-import com.portfolio.blog.dto.comment.CommentSaveDto;
+import com.portfolio.blog.dto.comment.CommentUpdateDto;
 import com.portfolio.blog.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class Comment extends BaseEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-    public void update(CommentSaveDto dto) {
+    public void update(CommentUpdateDto dto) {
         this.content = dto.getContent();
     }
 

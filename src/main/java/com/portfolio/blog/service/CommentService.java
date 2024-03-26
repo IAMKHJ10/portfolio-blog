@@ -1,9 +1,9 @@
 package com.portfolio.blog.service;
 
-import com.portfolio.blog.dto.MessageDto;
+import com.portfolio.blog.dto.comment.CommentDeleteDto;
 import com.portfolio.blog.dto.comment.CommentListDto;
-import com.portfolio.blog.dto.comment.CommentResultDto;
 import com.portfolio.blog.dto.comment.CommentSaveDto;
+import com.portfolio.blog.dto.comment.CommentUpdateDto;
 import com.portfolio.blog.entity.Comment;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.entity.Post;
@@ -26,7 +26,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public MessageDto<?> save(CommentSaveDto dto) {
+    public void save(CommentSaveDto dto) {
 
         Member member = memberRepository.findById(dto.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("글 작성자를 찾을 수 없습니다."));
@@ -34,22 +34,38 @@ public class CommentService {
         Post post = postRepository.findById(dto.getPostId())
                 .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
-        Comment comment = Comment.builder()
-                .content(dto.getContent())
-                .member(member)
-                .post(post)
-                .build();
+        Comment newComment;
+        if(dto.getParentId()!=null){ // 답글
+            Comment comment = commentRepository.findById(dto.getParentId())
+                    .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 
-        commentRepository.save(comment);
+            newComment = Comment.builder()
+                    .content(dto.getContent())
+                    .member(member)
+                    .parent(comment)
+                    .post(post)
+                    .build();
+        }else{ // 댓글
+            newComment = Comment.builder()
+                    .content(dto.getContent())
+                    .member(member)
+                    .post(post)
+                    .build();
+        }
 
-        CommentResultDto result = CommentResultDto.builder()
-                .id(comment.getId())
-                .content(comment.getContent())
-                .createdDate(comment.getCreatedDate())
-                .lastModifiedDate(comment.getLastModifiedDate())
-                .build();
+        commentRepository.save(newComment);
+    }
 
-        return new MessageDto<>("ok", result);
+    @Transactional
+    public void update(CommentUpdateDto dto) {
+
+        Post post = postRepository.findById(dto.getPostId())
+                .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
+
+        Comment comment = commentRepository.findById(dto.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        comment.update(dto);
     }
 
     @Transactional(readOnly = true)
@@ -67,6 +83,7 @@ public class CommentService {
                     .parentId(comment.getParent() == null ? null : comment.getParent().getId())
                     .memberId(member.getId())
                     .postId(post.getId())
+                    .memberName(member.getName())
                     .createdDate(post.getCreatedDate())
                     .lastModifiedDate(comment.getLastModifiedDate())
                     .build();
@@ -74,5 +91,14 @@ public class CommentService {
         }
 
         return list;
+    }
+
+    @Transactional
+    public void delete(CommentDeleteDto dto) {
+
+        Comment comment = commentRepository.findById(dto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        commentRepository.delete(comment);
     }
 }
