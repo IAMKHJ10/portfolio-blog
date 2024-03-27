@@ -10,6 +10,7 @@ import com.portfolio.blog.entity.Post;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +58,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostListDto> findAll() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         List<PostListDto> list = new ArrayList<>();
 
         for (Post post : posts){

@@ -12,12 +12,12 @@
     .c_con{margin:80px 0;line-height: 1.7;color:#212529;font-size:18px;min-height: 350px;}
     .detail_btn{text-align: center;font-size:15px;}
     .detail_btn>button{border: 0;background-color:#0a0a0a;color:#fff;margin:0 15px;border-radius: 5px;padding: 5px 15px;}
-    .comment{width:768px;margin:160px auto;}
+    .comment{width:768px;margin:160px auto 80px;}
     .comment_solid{border-top: 1px solid #dbdbdb;padding-top: 5rem;margin-bottom: 1rem;}
     .comment_content_origin{resize: none;width: 100%;height:100px;border: 1px solid #F1F3F5;padding: 16px 16px 24px;border-radius: 4px;color:#212529;margin-bottom:24px;}
-    .comment_content{resize: none;width: 100%;height:100px;border: 1px solid #F1F3F5;padding: 16px 16px 24px;border-radius: 4px;color:#212529;margin-bottom:24px;}
+    .comment_content{resize: none;width: 100%;height:100px;border: 1px solid #F1F3F5;padding: 16px 16px 24px;border-radius: 4px;color:#212529;}
     .comment_save_btn{border:0;background-color:#0a0a0a;color:#fff;border-radius: 4px;font-size: 16px;font-weight: bold;float: right;padding: 4px 20px;}
-    .comment_info{width:768px;margin:50px auto;border-bottom: 1px solid #F1F3F5;display: flex;flex-direction: column;padding-bottom:25px;}
+    .comment_info{width:768px;margin:20px auto 50px;border-bottom: 1px solid #F1F3F5;display: flex;flex-direction: column;padding-bottom:25px;}
     .info_top,.replyWrap{display:flex;}
     .info_mid{margin: 5px 0;font-size:17px;}
     .info_mid>p{margin:0;word-break: break-all;}
@@ -31,7 +31,7 @@
     .replyBtn{cursor:pointer;font-weight: bold;}
     .r_profile{display: inline-block;width:54px;height:54px;}
     .r_profile>img{width:100%;height:100%;border-radius: 50%;}
-    .reply_btn_wrap{margin-bottom:30px;}
+    .reply_btn_wrap{}
     .replyWrap,.r_con{background-color: rgba(0, 0, 0, 0.016);margin-left: 70px;}
     .addStyle{margin-bottom:30px;}
     .r_con{font-size: 17px;margin-left: 70px;word-break: break-all;margin-bottom: 5px;}
@@ -156,7 +156,7 @@
         </div>
     </div>
     <div class="c">
-        <div class="c_con" th:text="${post.content}"></div>
+        <div class="c_con" th:utext="${post.content}"></div>
     </div>
 
     <div class="detail_btn">
@@ -183,10 +183,10 @@
         <div class="comment_cnt" th:if="${commentList.size > 0}" th:text="|${commentList.size}개의 댓글|"></div>
         <div class="comment_info" th:each="comment:${commentList}" th:if="${comment.parentId == null}">
             <div class="info_top">
-                <div class="profile"><img src="/images/main_bg.jpg"></div>
+                <div class="profile"><img src="/images/profile.jpg"></div>
                 <div class="top_etc">
                     <div class="info_name" th:text="${comment.memberName}"></div>
-                    <div class="info_date" th:text="*{#temporals.format(comment.createdDate, 'yyyy년 MM월 dd일')}|"></div>
+                    <div class="info_date" th:text="*{#temporals.format(comment.createdDate, 'yyyy년 MM월 dd일 HH:mm')}|"></div>
                 </div>
                 <div class="reply_update_btn" th:if="${session.USER.id==comment.memberId}">
                     <span class="up" onclick="addUpdateHtml(this,'origin')">수정</span>
@@ -215,10 +215,10 @@
             <!-- 답글 시작 -->
             <div th:if="${comment.id == reply.parentId}" th:each="reply:${commentList}">
                 <div class="replyWrap">
-                    <div class="profile"><img src="/images/main_bg.jpg"></div>
+                    <div class="profile"><img src="/images/profile.jpg"></div>
                     <div class="top_etc">
                         <div class="info_name" th:text="${reply.memberName}"></div>
-                        <div class="info_date" th:text="*{#temporals.format(reply.createdDate, 'yyyy년 MM월 dd일')}|"></div>
+                        <div class="info_date" th:text="*{#temporals.format(reply.createdDate, 'yyyy년 MM월 dd일 HH:mm')}|"></div>
                     </div>
                     <div class="reply_update_btn" th:if="${session.USER.id==reply.memberId}">
                         <span class="up" onclick="addUpdateHtml(this,'')">수정</span>

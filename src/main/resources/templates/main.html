@@ -18,14 +18,16 @@
     .post_list>li>a{text-decoration-line: none;text-align: center;}
     .post_list>li>a>div>img{width: 100%;height: 180px;padding: 10px 10px;border-radius: 15px;}
     .post_list>li>a>.post_title{font-weight: bold;color:#000;font-size: 17px;width:100%;padding:0 20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .post_list>li>a>.post_desc{margin-top: 5px;color:#000;font-size: 13px;margin:5px 10px;white-space: normal;overflow: hidden;display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+    .post_list>li>a>.post_desc{height: 35px;margin-top: 5px;color:#000;font-size: 13px;margin:5px 10px;white-space: normal;overflow: hidden;display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
     .post_list>li>a>.post_date{position: absolute;left: 5px;bottom: 10px;color:#333;text-align: right;padding:0 10px;font-size: 14px;}
     .authWrap{width:0;height:0;}
     .auth{position:absolute;right:15px;top:15px;border-radius: 5px;text-decoration-line: none;color:#000;font-weight: bold;background-color: #fff;padding: 5px 15px;font-size: 15px;}
     .auth:hover{background: #000;color:#fff;}
 </style>
 <script th:inline="javascript">
-
+    $(document).ready(function() {
+        $(".post_desc").find("img").parent().remove()
+    });
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
@@ -47,7 +49,7 @@
                 <a th:href="@{/post/detail/{id}(id = ${post.id})}">
                     <div><img src="/images/main_bg.jpg" alt=""></div>
                     <div class="post_title" th:text="${post.title}"></div>
-                    <div class="post_desc" th:text="${post.content}"></div>
+                    <div class="post_desc" th:utext="${post.content}"></div>
                     <div class="post_date" th:text="*{#temporals.format(post.createdDate, 'yy.MM.dd')}"></div>
                 </a>
             </li>

@@ -2,10 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{common/header::header}"></head>
 <style>
-
+    *{font-family: -apple-system;}
+    .c{width:1000px;margin:0 auto;padding-top:100px;}
 </style>
 <script th:inline="javascript">
     function update(){
+
+        if($("#title").val()==''){
+            alert('제목을 입력하세요.')
+            $("#title").focus();
+            return false
+        }
+
+        if($('#file').val() == "") {
+            alert("썸네일을 업로드하세요.");
+            $("#file").focus();
+            return;
+        }
+
+        var content = tinymce.get('content').getContent();
+        if($.trim(content) == ''){
+            alert('내용을 입력하세요.')
+            return false
+        }
+
+        $("#content").val(content)
+
         $.ajax({
             url: "/post/update/"+[[${post.id}]],
             data: $("#updateForm").serialize(),
@@ -18,21 +40,84 @@
             }
         })
     }
+
+    $(function(){
+        var plugins = [
+            "advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor",
+            "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table",
+            "code", "help", "wordcount", "save"
+        ];
+        var edit_toolbar = 'formatselect fontselect fontsizeselect |'
+                   + ' forecolor backcolor |'
+                   + ' bold italic underline strikethrough |'
+                   + ' alignjustify alignleft aligncenter alignright |'
+                   + ' bullist numlist |'
+                   + ' table tabledelete |'
+                   + ' link image';
+
+        tinymce.init({
+            selector: '#content',
+            height: 500,
+            menubar: false,
+            plugins: plugins,
+            toolbar: edit_toolbar,
+            image_title: true,
+            automatic_uploads: true,
+            file_picker_types: 'image',
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.onload = function () {
+
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                    reader.readAsDataURL(file);
+                };
+                input.click();
+            },
+
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        });
+
+    });
 </script>
 <body>
+    <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
-    <form id="updateForm">
-        <input type="hidden" name="id" th:value="${post.id}">
-        <div>
-            <h2>글 수정</h2>
+    <div class="c">
+        <form id="updateForm">
+            <input type="hidden" name="id" th:value="${post.id}">
             <div>
-                <input type="text" name="title" th:value="${post.title}">
+                <div class="mb-3">
+                    <label for="title" class="form-label fw-bold">제목</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요." th:value="${post.title}">
+                </div>
+                <label for="file" class="form-label fw-bold">썸네일</label>
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" id="file" name="file">
+                    <label class="input-group-text" for="file">업로드</label>
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label fw-bold">내용</label>
+                    <textarea id="content" name="content" cols="50" rows="10" placeholder="내용을 입력하세요." th:text="${post.content}"></textarea>
+                </div>
+                <div style="text-align: center;">
+                    <button type="button" class="btn btn-outline-primary" onclick="update()">수정</button>
+                </div>
             </div>
-            <div>
-                <textarea name="content" cols="50" rows="10"  th:text="${post.content}"></textarea>
-            </div>
-            <button type="button" class="" onclick="update()">수정</button>
-        </div>
-    </form>
+        </form>
+    </div>
 </body>
 </html>

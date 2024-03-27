@@ -84,7 +84,7 @@ public class CommentService {
                     .memberId(member.getId())
                     .postId(post.getId())
                     .memberName(member.getName())
-                    .createdDate(post.getCreatedDate())
+                    .createdDate(comment.getCreatedDate())
                     .lastModifiedDate(comment.getLastModifiedDate())
                     .build();
             list.add(dto);
