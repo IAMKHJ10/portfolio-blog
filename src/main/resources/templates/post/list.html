@@ -3,8 +3,8 @@
 <head th:replace="~{common/header::header}"></head>
 <style>
     .t{width:1000px;margin:0 auto;padding-top:180px;border-bottom: 1px solid #333;}
-    .c_wrap{background-color: #f5f5f5;}
-    .c{width:1000px;margin:0 auto;margin-top:80px;}
+    .write{text-align: center;margin-top: 60px;}
+    .c{width:1000px;margin:0 auto;margin-top:75px;}
     .category_wrap{font-size: 36px;}
     .category_ul{display: flex;list-style: none;justify-content: space-evenly;}
     .category_ul>li{}
@@ -13,7 +13,7 @@
     .c_list{width:900px;background-color: #fff;}
     .c_ul{list-style: none;}
     .c_ul>li{border-bottom: 1px solid #777;margin-top:20px;}
-    .c_ul>li>a{display:flex;text-decoration: none;color:#777;padding-bottom: 20px;background-color: #fcfcfc;}
+    .c_ul>li>a{display:flex;text-decoration: none;color:#777;padding-bottom: 20px;}
     .c_ul>li>a:hover{color:#333}
     .c_img>img{width:200px;height:100%;padding: 10px;}
     .c_cont{padding: 20px 20px;position: relative;min-width: 668px;}
@@ -25,11 +25,14 @@
     .c_name{position: absolute;left: 0;bottom: 0;margin-left: 20px;margin-bottom: 20px;font-size: 14px;}
     .c_date{position: absolute;right: 0;bottom: 0;margin-right: 20px;margin-bottom: 20px;font-size: 14px;}
     .c_etc{margin-top: 35px;}
-
+    .active{color: #000;font-weight:bold;}
+    .writePost{background: #000;border-radius: 20px;padding: 7px 20px;text-decoration-line: none;color: #fff;font-weight: bold;}
+    .writePost:hover{background:#ff8c00;color:#fff;}
 </style>
 <script th:inline="javascript">
     $(document).ready(function() {
         $(".c_desc").find("img").parent().remove()
+        $('.category_ul').find('a[href="' + document.location.pathname + '"]').parents('li').addClass('active')
     });
 </script>
 <body>
@@ -39,14 +42,16 @@
     <div class="t">
         <div class="category_wrap">
             <ul class="category_ul">
-                <li><a href="#">여행</a></li>
-                <li><a href="#">IT</a></li>
-                <li><a href="#">스포츠</a></li>
-                <li><a href="#">연예</a></li>
+                <li><a href="/post/list/trip">여행</a></li>
+                <li><a href="/post/list/it">IT</a></li>
+                <li><a href="/post/list/sports">스포츠</a></li>
+                <li><a href="/post/list/food">푸드</a></li>
             </ul>
         </div>
     </div>
-    <div class="c_wrap"></div>
+    <div class="write">
+        <a class="writePost" href="/post/write">글쓰기</a>
+    </div>
     <div class="c">
         <div class="c_list">
             <ul class="c_ul">
@@ -73,8 +78,5 @@
             </ul>
         </div>
     </div>
-
-    <a href="/post/write">글쓰기</a>
-
 </body>
 </html>

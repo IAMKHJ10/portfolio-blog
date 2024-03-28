@@ -26,6 +26,10 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.sendRedirect("/login");
             return false;
         }
+        if(url.contains("/null")){
+            response.sendRedirect("/");
+            return false;
+        }
 
         return true;
     }

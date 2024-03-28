@@ -31,7 +31,7 @@
             type: 'POST',
             success: function(res){
                 if(res.key=='ok'){
-                    location.href = '/'
+                    location.href = [[${session.prevPage}]]
                 }else if(res.key=='noMember'){
                     alert('존재하지 않는 회원입니다.')
                 }else if(res.key=='differPw'){

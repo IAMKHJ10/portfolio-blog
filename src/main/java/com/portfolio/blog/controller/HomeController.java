@@ -2,6 +2,7 @@ package com.portfolio.blog.controller;
 
 import com.portfolio.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ public class HomeController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String home(Model model){
+    public String home(Model model, Pageable pageable){
         model.addAttribute("list", postService.findAll());
         return "main";
     }

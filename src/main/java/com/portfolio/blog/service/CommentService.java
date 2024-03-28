@@ -83,6 +83,7 @@ public class CommentService {
                     .parentId(comment.getParent() == null ? null : comment.getParent().getId())
                     .memberId(member.getId())
                     .postId(post.getId())
+                    .postMemberName(post.getMember().getName())
                     .memberName(member.getName())
                     .createdDate(comment.getCreatedDate())
                     .lastModifiedDate(comment.getLastModifiedDate())

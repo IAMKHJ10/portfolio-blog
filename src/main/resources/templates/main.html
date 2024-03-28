@@ -27,8 +27,14 @@
 <script th:inline="javascript">
     $(document).ready(function() {
         $(".post_desc").find("img").parent().remove()
+
     });
 </script>
+<form id="pagingForm">
+    <input type="hidden" name="page" value="0">
+    <input type="hidden" name="size" value="12">
+    <input type="hidden" name="sort" value="desc">
+</form>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div class="hb"></div>
@@ -37,8 +43,7 @@
         <div class="line"></div>
         <div class="desc">나만의 글을 작성해보세요.</div>
         <div style="text-align: center;">
-            <a class="start" href="/login" th:if="${session.USER==null}">시작하기</a>
-            <a class="start" href="/post/write" th:if="${session.USER!=null}">글쓰기</a>
+            <a class="start" href="/post/list">시작하기</a>
         </div>
     </div>
     <div class="c">

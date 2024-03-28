@@ -13,6 +13,7 @@ public class CommentListDto {
     private Long parentId;
     private Long memberId;
     private Long postId;
+    private String postMemberName;
     private String memberName;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
