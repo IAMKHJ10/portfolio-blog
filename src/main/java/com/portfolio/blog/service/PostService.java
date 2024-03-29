@@ -5,8 +5,10 @@ import com.portfolio.blog.dto.post.PostDetailDto;
 import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.dto.post.PostUpdateDto;
+import com.portfolio.blog.entity.Category;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.entity.Post;
+import com.portfolio.blog.repository.category.CategoryRepository;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +26,15 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public MessageDto<?> save(PostSaveDto dto) {
 
         Optional<Member> member = memberRepository.findById(dto.getMemberId());
+
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리입니다."));
 
         if(member.isPresent()){ // 글쓴이 정보가 있으면
             Member memberEntity = member.get();
@@ -37,10 +43,11 @@ public class PostService {
                     .title(dto.getTitle())
                     .content(dto.getContent())
                     .member(memberEntity)
+                    .category(category)
                     .build();
 
             postRepository.save(newPost);
-            return new MessageDto<>("ok");
+            return new MessageDto<>("ok", newPost.getId());
         }else{ // 글쓴이가 삭제된 상태
             return new MessageDto<>("no");
         }
@@ -51,7 +58,10 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
-        post.update(dto);
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+        post.update(dto, category);
 
         return new MessageDto<>("ok", post.getId());
     }
@@ -93,6 +103,7 @@ public class PostService {
                 .lastModifiedDate(post.getLastModifiedDate())
                 .memberId(member.getId())
                 .memberName(member.getName())
+                .categoryId(post.getCategory().getId())
                 .build();
     }
 

@@ -187,7 +187,7 @@
         </div>
     </div>
 
-    <div class="comment_info_wrap" id="comment_info_wrap" th:if="${commentList != null}">
+    <div class="comment_info_wrap" id="comment_info_wrap" th:if="${#lists.size(commentList) > 0}">
         <div class="comment_cnt" th:if="${commentList.size > 0}" th:text="|${commentList.size}개의 댓글|"></div>
         <div class="comment_info" th:each="comment:${commentList}" th:if="${comment.parentId == null}">
             <div class="info_top" th:classappend="${comment.memberName == comment.postMemberName} ? 'writer' : ''">

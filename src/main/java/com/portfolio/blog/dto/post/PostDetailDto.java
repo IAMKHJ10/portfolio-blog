@@ -16,4 +16,5 @@ public class PostDetailDto {
     private LocalDateTime lastModifiedDate;
     private Long memberId;
     private String memberName;
+    private Long categoryId;
 }

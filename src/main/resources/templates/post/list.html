@@ -42,10 +42,7 @@
     <div class="t">
         <div class="category_wrap">
             <ul class="category_ul">
-                <li><a href="/post/list/trip">여행</a></li>
-                <li><a href="/post/list/it">IT</a></li>
-                <li><a href="/post/list/sports">스포츠</a></li>
-                <li><a href="/post/list/food">푸드</a></li>
+                <li th:each="category:${categoryList}"><a th:href="@{|/post/list/${category.name}|}" th:text="${category.name}"></a></li>
             </ul>
         </div>
     </div>
@@ -55,6 +52,7 @@
     <div class="c">
         <div class="c_list">
             <ul class="c_ul">
+                <div th:if="${#lists.size(list) == 0}">등록된 글이 없습니다.</div>
                 <li th:each="post : ${list}">
                     <a th:href="@{|/post/detail/${post.id}|}">
                         <div class="c_img">
