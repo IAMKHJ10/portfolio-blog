@@ -11,31 +11,29 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QPost is a Querydsl query type for Post
+ * QFile is a Querydsl query type for File
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QPost extends EntityPathBase<Post> {
+public class QFile extends EntityPathBase<File> {
 
-    private static final long serialVersionUID = -1450275822L;
+    private static final long serialVersionUID = -1450579730L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QPost post = new QPost("post");
+    public static final QFile file = new QFile("file");
 
     public final com.portfolio.blog.entity.common.QBaseEntity _super = new com.portfolio.blog.entity.common.QBaseEntity(this);
-
-    public final QCategory category;
-
-    public final ListPath<Comment, QComment> comments = this.<Comment, QComment>createList("comments", Comment.class, QComment.class, PathInits.DIRECT2);
-
-    public final StringPath content = createString("content");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> CreatedDate = _super.CreatedDate;
 
-    public final ListPath<File, QFile> files = this.<File, QFile>createList("files", File.class, QFile.class, PathInits.DIRECT2);
+    public final StringPath fileName = createString("fileName");
 
-    public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
+    public final StringPath filePath = createString("filePath");
+
+    public final NumberPath<Long> fileSize = createNumber("fileSize", Long.class);
+
+    public final StringPath fileType = createString("fileType");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -44,28 +42,30 @@ public class QPost extends EntityPathBase<Post> {
 
     public final QMember member;
 
-    public final StringPath title = createString("title");
+    public final StringPath originFileName = createString("originFileName");
 
-    public QPost(String variable) {
-        this(Post.class, forVariable(variable), INITS);
+    public final QPost post;
+
+    public QFile(String variable) {
+        this(File.class, forVariable(variable), INITS);
     }
 
-    public QPost(Path<? extends Post> path) {
+    public QFile(Path<? extends File> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QPost(PathMetadata metadata) {
+    public QFile(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QPost(PathMetadata metadata, PathInits inits) {
-        this(Post.class, metadata, inits);
+    public QFile(PathMetadata metadata, PathInits inits) {
+        this(File.class, metadata, inits);
     }
 
-    public QPost(Class<? extends Post> type, PathMetadata metadata, PathInits inits) {
+    public QFile(Class<? extends File> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.category = inits.isInitialized("category") ? new QCategory(forProperty("category")) : null;
         this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
+        this.post = inits.isInitialized("post") ? new QPost(forProperty("post"), inits.get("post")) : null;
     }
 
 }

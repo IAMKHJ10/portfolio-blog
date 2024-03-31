@@ -8,6 +8,7 @@ import com.portfolio.blog.dto.post.PostUpdateDto;
 import com.portfolio.blog.entity.Category;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.entity.Post;
+import com.portfolio.blog.repository.FileRepository;
 import com.portfolio.blog.repository.category.CategoryRepository;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
@@ -27,6 +28,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final FileRepository fileRepository;
 
     @Transactional
     public MessageDto<?> save(PostSaveDto dto) {
@@ -38,7 +40,6 @@ public class PostService {
 
         if(member.isPresent()){ // 글쓴이 정보가 있으면
             Member memberEntity = member.get();
-
             Post newPost = Post.builder()
                     .title(dto.getTitle())
                     .content(dto.getContent())

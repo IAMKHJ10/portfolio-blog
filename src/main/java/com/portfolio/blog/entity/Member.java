@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +38,10 @@ public class Member extends BaseEntity {
     @Column(name = "member_role", nullable = false)
     private RoleType roleType;
 
+    @OneToMany(mappedBy = "member")
+    private List<Post> posts;
 
+    @OneToMany(mappedBy = "member")
+    private List<File> files = new ArrayList<>();
 
 }

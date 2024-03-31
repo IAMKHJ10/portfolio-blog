@@ -30,6 +30,7 @@ public class PostController {
     @ResponseBody
     @PostMapping("/post/save")
     public MessageDto<?> save(@ModelAttribute PostSaveDto dto){
+        dto.getFile().getOriginalFilename();
         return postService.save(dto);
     }
 

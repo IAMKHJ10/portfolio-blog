@@ -47,6 +47,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "post")
+    private List<File> files = new ArrayList<>();
+
     public void update(PostUpdateDto dto, Category category) {
         this.title = dto.getTitle();
         this.content = dto.getContent();

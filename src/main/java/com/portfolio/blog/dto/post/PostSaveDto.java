@@ -2,6 +2,7 @@ package com.portfolio.blog.dto.post;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -11,4 +12,5 @@ public class PostSaveDto {
     private String content;
     private Long memberId;
     private Long categoryId;
+    private MultipartFile file;
 }
