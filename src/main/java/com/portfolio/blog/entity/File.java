@@ -32,5 +32,4 @@ public class File extends BaseEntity {
     @Column(nullable = false)
     private Long fileSize;
 
-
 }

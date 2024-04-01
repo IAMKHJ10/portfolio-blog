@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,7 +22,7 @@ public class FileService {
     @Transactional
     public Long save(MultipartFile file) throws IOException {
 
-        String fullPath = "D:/files/";
+        String fullPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
         String type = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1); ;
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + file.getOriginalFilename();
@@ -37,7 +38,7 @@ public class FileService {
         File newFile = File.builder()
                 .fileName(fileName)
                 .originFileName(file.getOriginalFilename())
-                .filePath(fullPath)
+                .filePath("/files/"+fileName)
                 .fileType(type)
                 .fileSize(file.getSize())
                 .build();
@@ -49,6 +50,29 @@ public class FileService {
     public File findById(Long id){
         return fileRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 파일입니다."));
+    }
+
+    @Transactional
+    public boolean delete(Long id){
+        Optional<File> findFile = fileRepository.findById(id);
+        String fullPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\";
+
+        java.io.File file = new java.io.File(fullPath + findFile.get().getFileName());
+
+        if(file.exists()){
+            if(file.delete()){
+                log.info("파일삭제 : 성공 = {}", file);
+                fileRepository.deleteById(id);
+                return true;
+            }else {
+                log.info("파일삭제 : 실패 = {}", file);
+                return false;
+            }
+        }else {
+            log.info("파일삭제 : 경로를 찾지못하였습니다. = {}", file);
+            return false;
+        }
+
     }
 
 }

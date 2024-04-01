@@ -51,7 +51,7 @@
                 <li th:each="post : ${list}">
                     <a th:href="@{|/post/detail/${post.id}|}">
                         <div class="c_img">
-                            <img th:src="@{|${post.file.filePath}${post.file.fileName}|}" alt="no image">
+                            <img th:src="@{${post.file.filePath}}" alt="no image">
                         </div>
                         <div class="c_cont">
                             <div class="c_hit">조회수 <span th:text="${post.hit}"></span></div>

@@ -45,9 +45,10 @@ public class Post extends BaseEntity {
 
     private Long fileId;
 
-    public void update(PostUpdateDto dto) {
+    public void update(PostUpdateDto dto, Long fileId) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
+        this.fileId = fileId;
     }
 
 }

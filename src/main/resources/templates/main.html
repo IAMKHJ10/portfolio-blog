@@ -30,11 +30,6 @@
 
     });
 </script>
-<form id="pagingForm">
-    <input type="hidden" name="page" value="0">
-    <input type="hidden" name="size" value="12">
-    <input type="hidden" name="sort" value="desc">
-</form>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div class="hb"></div>
@@ -52,7 +47,7 @@
         <ul class="post_list">
             <li th:each="post:${list}">
                 <a th:href="@{/post/detail/{id}(id = ${post.id})}">
-                    <div><img src="/images/main_bg.jpg" alt=""></div>
+                    <div><img th:src="@{${post.file.filePath}}" alt="no image"></div>
                     <div class="post_title" th:text="${post.title}"></div>
                     <div class="post_desc" th:utext="${post.content}"></div>
                     <div class="post_date" th:text="*{#temporals.format(post.createdDate, 'yy.MM.dd')}"></div>

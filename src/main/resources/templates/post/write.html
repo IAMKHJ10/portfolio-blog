@@ -35,7 +35,7 @@
             }
         }
 
-        var content = tinymce.get('content').getContent();
+        let content = tinymce.get('content').getContent();
         if($.trim(content) == ''){
             alert('내용을 입력하세요.')
             $("#conDiv").focus();
@@ -44,8 +44,8 @@
 
         $("#content").val(content)
 
-        var form = $('#writeForm')[0];
-        var formData = new FormData(form);
+        let form = $('#writeForm')[0]
+        let formData = new FormData(form)
 
         $.ajax({
             url: "/post/save",

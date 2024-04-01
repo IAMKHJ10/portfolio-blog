@@ -50,13 +50,19 @@ public class PostService {
     }
 
     @Transactional
-    public MessageDto<?> update(Long id, PostUpdateDto dto) {
+    public MessageDto<?> update(Long id, PostUpdateDto dto) throws IOException {
         Post post = postRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
-        post.update(dto);
+        boolean result = fileService.delete(post.getFileId());
 
-        return new MessageDto<>("ok", post.getId());
+        if(result){
+            post.update(dto, fileService.save(dto.getFile()));
+            return new MessageDto<>("ok", post.getId());
+        }else{
+            return new MessageDto<>("false");
+        }
+
     }
 
     @Transactional(readOnly = true)
@@ -97,6 +103,7 @@ public class PostService {
                 .lastModifiedDate(post.getLastModifiedDate())
                 .memberId(member.getId())
                 .memberName(member.getName())
+                .file(fileService.findById(post.getFileId()))
                 .build();
     }
 

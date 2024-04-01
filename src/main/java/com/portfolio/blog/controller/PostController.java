@@ -43,7 +43,7 @@ public class PostController {
     //글 수정
     @ResponseBody
     @PatchMapping("/post/update/{id}")
-    public MessageDto<?> update(@PathVariable(name = "id") Long id, @ModelAttribute PostUpdateDto dto){
+    public MessageDto<?> update(@PathVariable(name = "id") Long id, @ModelAttribute PostUpdateDto dto) throws IOException {
         return postService.update(id, dto);
     }
 
