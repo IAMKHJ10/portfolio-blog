@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{common/header::header}"></head>
 <style>
-    .t{width:1000px;margin:0 auto;padding-top:180px;border-bottom: 1px solid #333;}
+    .t{width:1000px;margin:0 auto;padding-top:180px;}
     .write{text-align: center;margin-top: 60px;}
     .c{width:1000px;margin:0 auto;margin-top:75px;}
     .category_wrap{font-size: 36px;}
@@ -40,11 +40,6 @@
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
 
     <div class="t">
-        <div class="category_wrap">
-            <ul class="category_ul">
-                <li th:each="category:${categoryList}"><a th:href="@{|/post/list/${category.name}|}" th:text="${category.name}"></a></li>
-            </ul>
-        </div>
     </div>
     <div class="write">
         <a class="writePost" href="/post/write">글쓰기</a>
@@ -56,7 +51,7 @@
                 <li th:each="post : ${list}">
                     <a th:href="@{|/post/detail/${post.id}|}">
                         <div class="c_img">
-                            <img src="/images/main_bg.jpg">
+                            <img th:src="@{|${post.file.filePath}${post.file.fileName}|}" alt="no image">
                         </div>
                         <div class="c_cont">
                             <div class="c_hit">조회수 <span th:text="${post.hit}"></span></div>

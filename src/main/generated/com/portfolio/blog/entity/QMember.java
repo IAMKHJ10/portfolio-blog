@@ -27,7 +27,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath email = createString("email");
 
-    public final ListPath<File, QFile> files = this.<File, QFile>createList("files", File.class, QFile.class, PathInits.DIRECT2);
+    public final NumberPath<Long> fileId = createNumber("fileId", Long.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

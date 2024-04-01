@@ -8,12 +8,6 @@
 <script th:inline="javascript">
     function save(){
 
-        if($('#category option:selected').val()==''){
-            alert('카테고리를 선택하세요.')
-            $("#category").focus();
-            return false
-        }
-
         if($("#title").val()==''){
             alert('제목을 입력하세요.')
             $("#title").focus();
@@ -50,10 +44,16 @@
 
         $("#content").val(content)
 
+        var form = $('#writeForm')[0];
+        var formData = new FormData(form);
+
         $.ajax({
             url: "/post/save",
-            data: $("#writeForm").serialize(),
+            data: formData,
             type: 'POST',
+            contentType:false,
+            processData:false,
+            cache: false,
             success: function(res){
                 if(res.key=='ok'){
                     alert('글이 등록되었습니다.')
@@ -116,7 +116,7 @@
                 input.click();
             },
 
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:18px }'
         });
 
     });
@@ -127,14 +127,9 @@
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <div class="c">
-        <form id="writeForm">
+        <form id="writeForm" method="post" enctype="multipart/form-data">
             <input type="hidden" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
             <div>
-                <label class="form-label fw-bold">카테고리</label>
-                <select class="form-select mb-3" aria-label="Default select example" id="category" name="categoryId">
-                    <option value="" selected>선택</option>
-                    <option th:each="category:${categoryList}" th:value="${category.id}" th:text="${category.name}"></option>
-                </select>
                 <div class="mb-3">
                     <label for="title" class="form-label fw-bold">제목</label>
                     <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요.">

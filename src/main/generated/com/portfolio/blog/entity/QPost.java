@@ -24,8 +24,6 @@ public class QPost extends EntityPathBase<Post> {
 
     public final com.portfolio.blog.entity.common.QBaseEntity _super = new com.portfolio.blog.entity.common.QBaseEntity(this);
 
-    public final QCategory category;
-
     public final ListPath<Comment, QComment> comments = this.<Comment, QComment>createList("comments", Comment.class, QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");
@@ -33,7 +31,7 @@ public class QPost extends EntityPathBase<Post> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> CreatedDate = _super.CreatedDate;
 
-    public final ListPath<File, QFile> files = this.<File, QFile>createList("files", File.class, QFile.class, PathInits.DIRECT2);
+    public final NumberPath<Long> fileId = createNumber("fileId", Long.class);
 
     public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
 
@@ -64,8 +62,7 @@ public class QPost extends EntityPathBase<Post> {
 
     public QPost(Class<? extends Post> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.category = inits.isInitialized("category") ? new QCategory(forProperty("category")) : null;
-        this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
+        this.member = inits.isInitialized("member") ? new QMember(forProperty("member")) : null;
     }
 
 }

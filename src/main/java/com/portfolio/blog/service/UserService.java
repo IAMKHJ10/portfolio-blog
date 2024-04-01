@@ -34,6 +34,7 @@ public class UserService {
                     .name(member.get().getName())
                     .email(member.get().getEmail())
                     .roleType(member.get().getRoleType())
+                    .fileId(member.get().getFileId())
                     .build();
             return new MessageDto<>("ok", loginMember);
         }

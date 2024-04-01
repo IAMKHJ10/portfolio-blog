@@ -32,12 +32,5 @@ public class File extends BaseEntity {
     @Column(nullable = false)
     private Long fileSize;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
 
 }

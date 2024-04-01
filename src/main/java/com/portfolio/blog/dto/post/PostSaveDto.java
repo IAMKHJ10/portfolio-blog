@@ -11,6 +11,5 @@ public class PostSaveDto {
     private String title;
     private String content;
     private Long memberId;
-    private Long categoryId;
     private MultipartFile file;
 }

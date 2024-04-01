@@ -43,17 +43,11 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private Long fileId;
 
-    @OneToMany(mappedBy = "post")
-    private List<File> files = new ArrayList<>();
-
-    public void update(PostUpdateDto dto, Category category) {
+    public void update(PostUpdateDto dto) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
-        this.category = category;
     }
 
 }

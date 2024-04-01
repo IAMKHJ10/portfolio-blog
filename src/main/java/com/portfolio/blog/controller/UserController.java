@@ -2,7 +2,6 @@ package com.portfolio.blog.controller;
 
 import com.portfolio.blog.dto.MessageDto;
 import com.portfolio.blog.dto.user.LoginDto;
-import com.portfolio.blog.service.CategoryService;
 import com.portfolio.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
 
     private final UserService userService;
-    private final CategoryService categoryService;
 
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request){
@@ -57,12 +55,6 @@ public class UserController {
     public String profile(){
 
         return "user/profile";
-    }
-
-    @GetMapping("/myPage/category")
-    public String category(Model model){
-        model.addAttribute("categoryList", categoryService.findAll());
-        return "user/category";
     }
 
 }

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,10 +37,9 @@ public class Member extends BaseEntity {
     @Column(name = "member_role", nullable = false)
     private RoleType roleType;
 
-    @OneToMany(mappedBy = "member")
-    private List<Post> posts;
+    private Long fileId;
 
-    @OneToMany(mappedBy = "member")
-    private List<File> files = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Post> posts;
 
 }
