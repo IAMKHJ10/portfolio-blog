@@ -42,7 +42,6 @@
     .writer{background-color: #e4f9ff;}
 </style>
 <script th:inline="javascript">
-    const user = [[${session.USER}]]
     function list(){
         location.href = "/post/list"
     }
@@ -65,12 +64,14 @@
     }
 
     function commentSave(is){
+    /*[#th:if="${session.USER==null}"]*/
+        const user = '[[${session.USER}]]'
         if(user==null){
             alert('로그인이 필요합니다.')
             location.href = '/login'
             return false;
         }
-
+    /*[/]*/
         let data;
         if(is){
             data = $(is).parent().parent().serialize()
@@ -157,7 +158,7 @@
     <div class="t">
         <div class="t_con">
             <div class="t_title" th:text="${post.title}"></div>
-            <span class="t_name" th:text="${post.memberName}"></span>
+            <span class="t_name" th:text="${post.member.name}"></span>
             <span class="separator">·</span>
             <span class="t_date" th:text="*{#temporals.format(post.createdDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>
             <span class="t_hit">조회수 <span th:text="${post.hit}"></span></span>
@@ -169,8 +170,8 @@
 
     <div class="detail_btn">
         <button onclick="list()" type="button" class="">목록</button>
-        <button onclick="update()" type="button" class="" th:if="${session.USER != null && session.USER.id==post.memberId}">수정</button>
-        <button onclick="del()" type="button" class="" th:if="${session.USER != null && session.USER.id==post.memberId}">삭제</button>
+        <button onclick="update()" type="button" class="" th:if="${session.USER != null && session.USER.id==post.member.id}">수정</button>
+        <button onclick="del()" type="button" class="" th:if="${session.USER != null && session.USER.id==post.member.id}">삭제</button>
     </div>
 
     <div class="comment">

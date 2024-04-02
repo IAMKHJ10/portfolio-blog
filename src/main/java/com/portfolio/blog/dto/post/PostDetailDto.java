@@ -1,6 +1,7 @@
 package com.portfolio.blog.dto.post;
 
 import com.portfolio.blog.entity.File;
+import com.portfolio.blog.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,7 +16,6 @@ public class PostDetailDto {
     private int hit;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
-    private Long memberId;
-    private String memberName;
+    private Member member;
     private File file;
 }

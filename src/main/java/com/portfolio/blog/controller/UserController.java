@@ -1,23 +1,25 @@
 package com.portfolio.blog.controller;
 
 import com.portfolio.blog.dto.MessageDto;
+import com.portfolio.blog.dto.member.ChangeProfileDto;
 import com.portfolio.blog.dto.user.LoginDto;
+import com.portfolio.blog.service.MemberService;
 import com.portfolio.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final MemberService memberService;
 
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request){
@@ -51,10 +53,16 @@ public class UserController {
         return "redirect:/user/login";
     }
 
-    @GetMapping("/myPage/profile")
-    public String profile(){
-
+    @GetMapping("/myPage/profile/{uid}")
+    public String profile(@PathVariable(name = "uid") String uid, Model model){
+        model.addAttribute("member", memberService.findByUid(uid));
         return "user/profile";
+    }
+
+    @PostMapping("/upload/profile")
+    public String profile(ChangeProfileDto dto) throws IOException {
+        memberService.changeProfile(dto);
+        return "redirect:/myPage/profile/"+dto.getMemberUid();
     }
 
 }

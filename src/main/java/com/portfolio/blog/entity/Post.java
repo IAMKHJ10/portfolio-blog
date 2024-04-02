@@ -39,16 +39,15 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    private Long fileId;
+    @OneToMany(mappedBy = "post")
+    private List<File> files = new ArrayList<>();
 
-    public void update(PostUpdateDto dto, Long fileId) {
+    public void update(PostUpdateDto dto) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
-        this.fileId = fileId;
     }
 
 }

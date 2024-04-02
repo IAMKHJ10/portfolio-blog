@@ -1,11 +1,13 @@
 package com.portfolio.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.portfolio.blog.entity.common.BaseEntity;
 import com.portfolio.blog.entity.common.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,9 +39,11 @@ public class Member extends BaseEntity {
     @Column(name = "member_role", nullable = false)
     private RoleType roleType;
 
-    private Long fileId;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<File> files = new ArrayList<>();
 
 }
