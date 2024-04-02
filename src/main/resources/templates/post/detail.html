@@ -64,14 +64,15 @@
     }
 
     function commentSave(is){
-    /*[#th:if="${session.USER==null}"]*/
-        const user = '[[${session.USER}]]'
-        if(user==null){
+
+        const user = $('#user').val()
+
+        if(user==undefined){
             alert('로그인이 필요합니다.')
             location.href = '/login'
             return false;
         }
-    /*[/]*/
+
         let data;
         if(is){
             data = $(is).parent().parent().serialize()
@@ -178,7 +179,7 @@
         <div class="comment_solid"></div>
         <div class="comment_form">
             <form id="commentForm">
-                <input type="hidden" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
+                <input type="hidden" id="user" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
                 <input type="hidden" name="postId" th:if="${post.id != null}" th:value="${post.id}">
                 <div>
                     <textarea class="comment_content_origin" id="commentContent" name="content" placeholder="내용을 작성하세요"></textarea>
