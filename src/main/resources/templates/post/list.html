@@ -28,12 +28,17 @@
     .active{color: #000;font-weight:bold;}
     .writePost{background: #000;border-radius: 20px;padding: 7px 20px;text-decoration-line: none;color: #fff;font-weight: bold;}
     .writePost:hover{background:#ff8c00;color:#fff;}
+    .pageWrap{text-align:center;margin: 100px 0;}
 </style>
 <script th:inline="javascript">
     $(document).ready(function() {
         $(".c_desc").find("img").parent().remove()
         $('.category_ul').find('a[href="' + document.location.pathname + '"]').parents('li').addClass('active')
     });
+
+    function list(){
+        location.href = '/post/list'
+    }
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
@@ -49,9 +54,10 @@
             <ul class="c_ul">
                 <div th:if="${#lists.size(list) == 0}">등록된 글이 없습니다.</div>
                 <li th:each="post : ${list}">
-                    <a th:href="@{|/post/detail/${post.id}|}">
+                    <a th:href="@{|/post/detail/${post.id}|(page=${list.number + 1})}">
                         <div class="c_img">
-                            <img th:src="@{${post.file.filePath}}" alt="no image">
+                            <img th:if="${#lists.size(list) == 0}" src="/images/no_img.png" alt="no image">
+                            <img th:if="${#lists.size(list) > 0}" th:src="@{${post.file.filePath}}" alt="">
                         </div>
                         <div class="c_cont">
                             <div class="c_hit">조회수 <span th:text="${post.hit}"></span></div>
@@ -69,6 +75,24 @@
                     </a>
                 </li>
             </ul>
+        </div>
+        <!-- 페이징 -->
+        <div class="pageWrap">
+            <!-- 첫번째 페이지로 이동 -->
+            <a th:href="@{/post/list(page=1)}">처음</a>
+            <!-- 이전 링크 활성화 비활성화 -->
+            <a th:href="${list.first} ? '#' : @{/post/list(page=${list.number})}">이전</a>
+            <!-- 페이지 번호 링크(현재 페이지는 숫자만) -->
+            <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <span th:if="${page == list.number + 1}" th:text="${page}"></span>
+                <span th:unless="${page == list.number + 1}">
+                    <a th:href="@{/post/list(page=${page})}" th:text="${page}"></a>
+                </span>
+            </span>
+            <!-- 다음 링크 활성화 비활성화 -->
+            <a th:href="${list.last} ? '#' : @{/post/list(page=${list.number + 2})}">다음</a>
+            <!-- 마지막 페이지로 이동 -->
+            <a th:href="@{/post/list(page=${list.totalPages})}">마지막</a>
         </div>
     </div>
 </body>

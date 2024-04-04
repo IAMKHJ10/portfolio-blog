@@ -1,6 +1,7 @@
 package com.portfolio.blog.dto.post;
 
 import com.portfolio.blog.entity.File;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class PostListDto {
     private Long id;
     private String title;
@@ -15,6 +17,5 @@ public class PostListDto {
     private int hit;
     private String memberName;
     private File file;
-
     private LocalDateTime createdDate;
 }

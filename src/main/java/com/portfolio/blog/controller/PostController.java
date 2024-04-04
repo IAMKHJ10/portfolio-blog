@@ -1,11 +1,16 @@
 package com.portfolio.blog.controller;
 
 import com.portfolio.blog.dto.MessageDto;
+import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.dto.post.PostUpdateDto;
 import com.portfolio.blog.service.CommentService;
 import com.portfolio.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +34,14 @@ public class PostController {
     @ResponseBody
     @PostMapping("/post/save")
     public MessageDto<?> save(@ModelAttribute PostSaveDto dto) throws IOException {
-
         return postService.save(dto);
     }
 
     //글 수정 화면
     @GetMapping("/post/update/{id}")
-    public String update(@PathVariable(name = "id") Long id, Model model){
+    public String update(@PathVariable(name = "id") Long id, Model model, @PageableDefault(page = 1) Pageable pageable){
         model.addAttribute("post", postService.findById(id));
+        model.addAttribute("page", pageable.getPageNumber());
         return "post/update";
     }
 
@@ -48,18 +53,34 @@ public class PostController {
     }
 
     //글 목록
-    @GetMapping("/post/list")
+    @GetMapping("/post/list2")
     public String list(Model model){
-        model.addAttribute("list", postService.findAll());
+        model.addAttribute("list", postService.findAll2());
+        return "post/list";
+    }
+    @GetMapping("/post/list")
+    public String list(@PageableDefault(page = 1, size = 10, direction = Sort.Direction.DESC) Pageable pageable, Model model){
+
+        Page<PostListDto> list = postService.findAll(pageable);
+
+        int blockLimit = 3;
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) -1) * blockLimit + 1;
+        int endPage = Math.min((startPage + blockLimit - 1), list.getTotalPages());
+
+        model.addAttribute("list", list);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "post/list";
     }
 
     //글 단건 조회
     @GetMapping("/post/detail/{id}")
-    public String findById(@PathVariable(name = "id") Long id, Model model){
+    public String findById(@PathVariable(name = "id") Long id, Model model, @PageableDefault(page = 1) Pageable pageable){
         postService.updateHits(id);
         model.addAttribute("post", postService.findById(id));
         model.addAttribute("commentList", commentService.findAllByPost(id));
+        model.addAttribute("page", pageable.getPageNumber());
         return "post/detail";
     }
 

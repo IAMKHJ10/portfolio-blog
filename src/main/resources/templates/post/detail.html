@@ -43,11 +43,11 @@
 </style>
 <script th:inline="javascript">
     function list(){
-        location.href = "/post/list"
+        location.href = "/post/list?page="+[[${page}]]
     }
 
     function update(){
-        location.href = "/post/update/" + [[${post.id}]]
+        location.href = "/post/update/"+[[${post.id}]]+"?page="+[[${page}]]
     }
 
     function del(){
@@ -57,7 +57,7 @@
             success: function(res){
                 if(res.key=='ok'){
                     alert('글이 삭제되었습니다.')
-                    location.href = '/post/list'
+                    location.href = '/post/list?page='+[[${page}]]
                 }
             }
         })

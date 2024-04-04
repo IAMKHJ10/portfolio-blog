@@ -10,6 +10,9 @@ import com.portfolio.blog.entity.Post;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,20 +58,24 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
-        boolean result = fileService.delete(post.getFiles().get(0));
+        post.update(dto);
 
-        if(result){
-            post.update(dto);
-            fileService.saveWithPost(dto.getFile(), post);
-            return new MessageDto<>("ok", post.getId());
-        }else{
-            return new MessageDto<>("false");
+        if(dto.getFile()!=null && !dto.getFile().isEmpty()){//파일 있으면
+            boolean result = fileService.delete(post.getFiles().get(0)); //실제파일 삭제성공 여부
+
+            if(result){//실제 파일 성공하고 새로운 받은 파일 업로드
+                fileService.saveWithPost(dto.getFile(), post);
+                return new MessageDto<>("ok", post.getId());
+            }else{
+                return new MessageDto<>("false");
+            }
         }
 
+        return new MessageDto<>("ok", post.getId());
     }
 
     @Transactional(readOnly = true)
-    public List<PostListDto> findAll() {
+    public List<PostListDto> findAll2() {
         List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         List<PostListDto> list = new ArrayList<>();
 
@@ -90,6 +97,15 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
+    public Page<PostListDto> findAll(Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 3;
+        Page<Post> posts = postRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"id")));
+        return posts
+                .map(post -> new PostListDto(post.getId(), post.getTitle(), post.getContent(), post.getHit(), post.getMember().getName(), post.getFiles().get(0), post.getCreatedDate()));
+    }
+
+    @Transactional(readOnly = true)
     public PostDetailDto findById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
@@ -102,7 +118,6 @@ public class PostService {
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
                 .member(post.getMember())
-                //.file(post.getFiles().isEmpty()?null:post.getFiles().get(0))
                 .file(post.getFiles().get(0))
                 .build();
     }
@@ -119,6 +134,5 @@ public class PostService {
     public void updateHits(Long id){
         postRepository.updateHits(id);
     }
-
 
 }
