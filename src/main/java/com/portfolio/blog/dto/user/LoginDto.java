@@ -1,7 +1,10 @@
 package com.portfolio.blog.dto.user;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.portfolio.blog.entity.File;
+import com.portfolio.blog.entity.common.RoleType;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter

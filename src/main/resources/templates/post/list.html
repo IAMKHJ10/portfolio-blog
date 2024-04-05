@@ -28,7 +28,11 @@
     .active{color: #000;font-weight:bold;}
     .writePost{background: #000;border-radius: 20px;padding: 7px 20px;text-decoration-line: none;color: #fff;font-weight: bold;}
     .writePost:hover{background:#ff8c00;color:#fff;}
-    .pageWrap{text-align:center;margin: 100px 0;}
+    .pageWrap{display: flex;justify-content: center;margin: 100px 0;}
+    .pageWrap>a{border: 1px solid #0a0a0a;color:#0a0a0a;padding: 7px 10px;border-radius: 5px;text-decoration: none;font-weight: bold;}
+    .pageWrap>span{border: 1px solid #0a0a0a;color:#0a0a0a;padding: 7px 10px;border-radius: 5px;text-decoration: none;font-weight: bold;}
+    .pageWrap>span>a{text-decoration: none;color:#0a0a0a;}
+    .ho:hover{text-decoration: underline;}
 </style>
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -56,8 +60,8 @@
                 <li th:each="post : ${list}">
                     <a th:href="@{|/post/detail/${post.id}|(page=${list.number + 1})}">
                         <div class="c_img">
-                            <img th:if="${#lists.size(list) == 0}" src="/images/no_img.png" alt="no image">
-                            <img th:if="${#lists.size(list) > 0}" th:src="@{${post.file.filePath}}" alt="">
+                            <img src="/images/no_img.png" alt="" th:if="${post.file==null}">
+                            <img th:src="@{${post.file.filePath}}" alt="" th:if="${post.file!=null}">
                         </div>
                         <div class="c_cont">
                             <div class="c_hit">조회수 <span th:text="${post.hit}"></span></div>
@@ -79,20 +83,18 @@
         <!-- 페이징 -->
         <div class="pageWrap">
             <!-- 첫번째 페이지로 이동 -->
-            <a th:href="@{/post/list(page=1)}">처음</a>
+            <a class="me-1 ho" th:href="@{/post/list(page=1)}">처음</a>
             <!-- 이전 링크 활성화 비활성화 -->
-            <a th:href="${list.first} ? '#' : @{/post/list(page=${list.number})}">이전</a>
+            <a class="me-3 ho" th:href="${list.first} ? '#' : @{/post/list(page=${list.number})}">이전</a>
             <!-- 페이지 번호 링크(현재 페이지는 숫자만) -->
-            <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <span th:style="${page == list.number + 1?'background-color:#0a0a0a;color: #fff;':''}" class="ms-1 me-1" th:each="page : ${#numbers.sequence(startPage, endPage)}">
                 <span th:if="${page == list.number + 1}" th:text="${page}"></span>
-                <span th:unless="${page == list.number + 1}">
-                    <a th:href="@{/post/list(page=${page})}" th:text="${page}"></a>
-                </span>
+                <a class="ho" th:unless="${page == list.number + 1}" th:href="@{/post/list(page=${page})}" th:text="${page}"></a>
             </span>
             <!-- 다음 링크 활성화 비활성화 -->
-            <a th:href="${list.last} ? '#' : @{/post/list(page=${list.number + 2})}">다음</a>
+            <a class="ms-3 ho" th:href="${list.last} ? '#' : @{/post/list(page=${list.number + 2})}">다음</a>
             <!-- 마지막 페이지로 이동 -->
-            <a th:href="@{/post/list(page=${list.totalPages})}">마지막</a>
+            <a class="ms-1 ho" th:href="@{/post/list(page=${list.totalPages})}">마지막</a>
         </div>
     </div>
 </body>

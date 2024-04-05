@@ -53,16 +53,16 @@ public class PostController {
     }
 
     //글 목록
-    @GetMapping("/post/list2")
-    public String list(Model model){
-        model.addAttribute("list", postService.findAll2());
-        return "post/list";
-    }
     @GetMapping("/post/list")
     public String list(@PageableDefault(page = 1, size = 10, direction = Sort.Direction.DESC) Pageable pageable, Model model){
 
         Page<PostListDto> list = postService.findAll(pageable);
 
+        /*
+         * blockLimit : page 개수 설정
+         * 현재 사용자가 선택한 페이지 앞 뒤로 3페이지씩만 보여준다.
+         * ex : 현재 사용자가 4페이지라면 2, 3, (4), 5, 6
+         */
         int blockLimit = 3;
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) -1) * blockLimit + 1;
         int endPage = Math.min((startPage + blockLimit - 1), list.getTotalPages());

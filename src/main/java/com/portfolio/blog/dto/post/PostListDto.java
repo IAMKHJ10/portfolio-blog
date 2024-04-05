@@ -1,6 +1,7 @@
 package com.portfolio.blog.dto.post;
 
 import com.portfolio.blog.entity.File;
+import com.portfolio.blog.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,4 +19,14 @@ public class PostListDto {
     private String memberName;
     private File file;
     private LocalDateTime createdDate;
+
+    public PostListDto(Post entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.hit = entity.getHit();
+        this.memberName = entity.getMember().getName();
+        this.file = entity.getFiles().get(0);
+        this.createdDate = entity.getCreatedDate();
+    }
 }

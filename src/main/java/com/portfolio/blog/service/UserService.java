@@ -2,6 +2,7 @@ package com.portfolio.blog.service;
 
 import com.portfolio.blog.dto.MessageDto;
 import com.portfolio.blog.dto.user.LoginDto;
+import com.portfolio.blog.dto.user.LoginSessionDto;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class UserService {
         }
 
         if(passwordEncoder().matches(dto.getPassword(), member.get().getPassword())){ // 비밀번호 맞으면
-            Member loginMember = Member.builder()
+            LoginSessionDto loginMember = LoginSessionDto.builder()
                     .id(member.get().getId())
                     .uid(member.get().getUid())
                     .name(member.get().getName())

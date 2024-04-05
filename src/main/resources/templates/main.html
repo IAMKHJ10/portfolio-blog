@@ -29,7 +29,43 @@
     $(document).ready(function() {
         $(".post_desc").find("img").parent().remove()
 
+        $.ajax({
+            url: "/post/scroll?page=0&size=12&sort=id,desc",
+            type: 'GET',
+            dataType: 'json',
+            success: function(res){
+                if(res.size<0){
+                    $('.c_desc').html('등록된 글이 없습니다.')
+                }else{
+                    $('.c_desc').html('최근 등록된 글목록입니다.')
+                }
+                createHtml(res)
+                console.log(res)
+            }
+        })
+
     });
+
+    function createHtml(data){
+        let array = data.content
+
+        for (let i = 0; i < array.length; i++) {
+            let con = array[i]
+            let date = con.createdDate.substring(2, 10)
+            const html = ''
+                +`<li>`
+                    +`<a href="/post/detail/${con.id}">`
+                        +`<div><img src="${con.file.filePath}"></div>`
+                        +`<div class="post_title">${con.title}</div>`
+                        +`<div class="post_desc">${con.content}</div>`
+                        +`<div class="post_name">${con.memberName}</div>`
+                        +`<div class="post_date">${date}</div>`
+                    +'</a>'
+                +'</li>'
+            $('#postCon').append(html);
+        }
+    }
+
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
@@ -43,19 +79,8 @@
         </div>
     </div>
     <div class="c">
-        <div th:if="${#lists.size(list) > 0}" class="c_desc">최근 등록된 글목록입니다.</div>
-        <div th:if="${#lists.size(list) == 0}" class="c_desc">등록된 글이 없습니다.</div>
-        <ul class="post_list">
-            <li th:each="post:${list}">
-                <a th:href="@{/post/detail/{id}(id = ${post.id})}">
-                    <div><img th:src="@{${post.file.filePath}}" alt="no image"></div>
-                    <div class="post_title" th:text="${post.title}"></div>
-                    <div class="post_desc" th:utext="${post.content}"></div>
-                    <div class="post_name" th:text="${post.memberName}"></div>
-                    <div class="post_date" th:text="*{#temporals.format(post.createdDate, 'yy.MM.dd')}"></div>
-                </a>
-            </li>
-        </ul>
+        <div class="c_desc"></div>
+        <ul class="post_list" id="postCon"></ul>
     </div>
 </body>
 </html>

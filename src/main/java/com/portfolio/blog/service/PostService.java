@@ -10,10 +10,7 @@ import com.portfolio.blog.entity.Post;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,34 +72,19 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostListDto> findAll2() {
-        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-        List<PostListDto> list = new ArrayList<>();
-
-        for (Post post : posts){
-            Member member = post.getMember();
-            PostListDto dto = PostListDto.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .hit(post.getHit())
-                    .memberName(member.getName())
-                    .createdDate(post.getCreatedDate())
-                    .file(post.getFiles().get(0))
-                    .build();
-            list.add(dto);
-        }
-
-        return list;
+    public Slice<PostListDto> findAllSlice(Pageable pageable) {
+        Slice<Post> posts = postRepository.findAll(pageable);
+        return posts
+                .map(PostListDto::new);
     }
 
     @Transactional(readOnly = true)
     public Page<PostListDto> findAll(Pageable pageable) {
-        int page = pageable.getPageNumber() - 1;
-        int pageLimit = 3;
+        int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작
+        int pageLimit = 10; // 한페이지에 보여줄 글 개수
         Page<Post> posts = postRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"id")));
         return posts
-                .map(post -> new PostListDto(post.getId(), post.getTitle(), post.getContent(), post.getHit(), post.getMember().getName(), post.getFiles().get(0), post.getCreatedDate()));
+                .map(PostListDto::new);
     }
 
     @Transactional(readOnly = true)

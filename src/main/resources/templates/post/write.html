@@ -37,6 +37,7 @@
 
         let content = tinymce.get('content').getContent();
         if($.trim(content) == ''){
+            $("#conDiv").attr("tabindex", "0")
             alert('내용을 입력하세요.')
             $("#conDiv").focus();
             return false
@@ -140,7 +141,7 @@
                     <label class="input-group-text" for="file">업로드</label>
                 </div>
                 <div class="mb-3">
-                    <label tabindex="0" id="conDiv" for="content" class="form-label fw-bold">내용</label>
+                    <label id="conDiv" for="content" class="form-label fw-bold">내용</label>
                     <textarea id="content" name="content" cols="50" rows="10" placeholder="내용을 입력하세요."></textarea>
                 </div>
                 <div style="text-align: center;margin-bottom: 200px;">
