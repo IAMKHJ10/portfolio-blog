@@ -24,13 +24,14 @@
     .authWrap{width:0;height:0;}
     .auth{position:absolute;right:15px;top:15px;border-radius: 5px;text-decoration-line: none;color:#000;font-weight: bold;background-color: #fff;padding: 5px 15px;font-size: 15px;}
     .auth:hover{background: #000;color:#fff;}
+    .conLast{margin:100px 0;font-weight: bold;}
 </style>
 <script th:inline="javascript">
     $(document).ready(function() {
         $(".post_desc").find("img").parent().remove()
 
         $.ajax({
-            url: "/post/scroll?page=0&size=12&sort=id,desc",
+            url: "/post/scroll?page=0&size=3&sort=id,desc",
             type: 'GET',
             dataType: 'json',
             success: function(res){
@@ -40,7 +41,6 @@
                     $('.c_desc').html('최근 등록된 글목록입니다.')
                 }
                 createHtml(res)
-                console.log(res)
             }
         })
 
@@ -62,10 +62,39 @@
                         +`<div class="post_date">${date}</div>`
                     +'</a>'
                 +'</li>'
-            $('#postCon').append(html);
+            $('#postCon').append(html)
         }
     }
 
+    let page = 1
+    let last = false
+    let end = false
+
+    $(window).scroll(function() {
+       if($(window).scrollTop() + $(window).height() == $(document).height()) {
+
+            if(last==false){
+                $.ajax({
+                    url: '/post/scroll?page='+page+'&size=3&sort=id,desc',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res){
+                        createHtml(res)
+                        page++
+                        if(res.last==true){
+                            last = true
+                        }
+                    }
+                })
+            }else{
+                if(end==false){
+                    $('.conLast').html('더 이상 추가될 글이 없습니다.')
+                }
+                end = true
+            }
+
+       }
+    })
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
@@ -81,6 +110,7 @@
     <div class="c">
         <div class="c_desc"></div>
         <ul class="post_list" id="postCon"></ul>
+        <div class="conLast text-center"></div>
     </div>
 </body>
 </html>
