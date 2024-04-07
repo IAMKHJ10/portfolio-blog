@@ -28,22 +28,20 @@
 </style>
 <script th:inline="javascript">
     $(document).ready(function() {
-        $(".post_desc").find("img").parent().remove()
-
         $.ajax({
-            url: "/post/scroll?page=0&size=3&sort=id,desc",
+            url: "/post/scroll?page=0&size=1&sort=id,desc",
             type: 'GET',
             dataType: 'json',
             success: function(res){
-                if(res.size<0){
+                if(res.content.length<=0){
                     $('.c_desc').html('등록된 글이 없습니다.')
                 }else{
                     $('.c_desc').html('최근 등록된 글목록입니다.')
                 }
                 createHtml(res)
+                $(".post_desc").find("img").parent().remove()
             }
         })
-
     });
 
     function createHtml(data){
@@ -75,11 +73,12 @@
 
             if(last==false){
                 $.ajax({
-                    url: '/post/scroll?page='+page+'&size=3&sort=id,desc',
+                    url: '/post/scroll?page='+page+'&size=1&sort=id,desc',
                     type: 'GET',
                     dataType: 'json',
                     success: function(res){
                         createHtml(res)
+                        $(".post_desc").find("img").parent().remove()
                         page++
                         if(res.last==true){
                             last = true

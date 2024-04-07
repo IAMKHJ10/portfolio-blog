@@ -13,6 +13,7 @@
     .c_list{width:900px;background-color: #fff;}
     .c_ul{list-style: none;}
     .c_ul>li{border-bottom: 1px solid #777;margin-top:20px;}
+    .c_ul>li:first-child{border-top: 1px solid #777;margin-top:0;padding-top:20px;}
     .c_ul>li>a{display:flex;text-decoration: none;color:#777;padding-bottom: 20px;}
     .c_ul>li>a:hover{color:#333}
     .c_img>img{width:200px;height:100%;padding: 10px;}
@@ -33,6 +34,7 @@
     .pageWrap>span{border: 1px solid #0a0a0a;color:#0a0a0a;padding: 7px 10px;border-radius: 5px;text-decoration: none;font-weight: bold;}
     .pageWrap>span>a{text-decoration: none;color:#0a0a0a;}
     .ho:hover{text-decoration: underline;}
+    .noList{font-weight:bold;}
 </style>
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -56,7 +58,7 @@
     <div class="c">
         <div class="c_list">
             <ul class="c_ul">
-                <div th:if="${#lists.size(list) == 0}">등록된 글이 없습니다.</div>
+                <div class="noList" th:if="${list.totalElements<=0}">등록된 글이 없습니다.</div>
                 <li th:each="post : ${list}">
                     <a th:href="@{|/post/detail/${post.id}|(page=${list.number + 1})}">
                         <div class="c_img">
@@ -81,7 +83,7 @@
             </ul>
         </div>
         <!-- 페이징 -->
-        <div class="pageWrap">
+        <div class="pageWrap" th:if="${list.totalElements>0}">
             <!-- 첫번째 페이지로 이동 -->
             <a class="me-1 ho" th:href="@{/post/list(page=1)}">처음</a>
             <!-- 이전 링크 활성화 비활성화 -->

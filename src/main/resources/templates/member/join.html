@@ -14,7 +14,11 @@
 </style>
 <script th:inline="javascript">
     function join(){
-
+        const regUid = /^[a-zA-Z][0-9a-zA-Z]{3,11}$/g
+        if(regUid.test($("#uid").val()) == false){
+            alert('아이디는 영문 또는 숫자 4~12자 입력하세요.')
+            return false
+        }
         if($("#uid").val()==''){
             alert('아이디를 입력하세요.')
             return false
@@ -23,12 +27,26 @@
             alert('비밀번호를 입력하세요.')
             return false
         }
-        if($("#name").val()==''){
+        if($("#password").val().length<8||$("#password").val().length>16){
+            alert('비밀번호를 8~16자 입력하세요.')
+            return false
+        }
+        if($("#name").val()==''||$("#name").val().length>15){
             alert('이름을 입력하세요.')
+            return false
+        }
+        const regName =  /^[가-힣]+$/
+        if(regName.test($("#name").val()) == false){
+            alert('이름은 한글만 입력하세요.')
             return false
         }
         if($("#email").val()==''){
             alert('이메일을 입력하세요.')
+            return false
+        }
+        const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+        if (regEmail.test($("#email").val()) == false) {
+            alert('이메일이 올바르지 않은 형식입니다.')
             return false
         }
 
