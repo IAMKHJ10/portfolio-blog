@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{common/header::header}"></head>
 <style>
-    .hb{background: url(/images/main_bg.jpg);position: absolute;z-index: -1;height: 550px;width: 100%;opacity: 0.9;}
+    .hb{background: url(/images/main_bg.jpg);position: absolute;z-index: -1;height: 550px;width: 100%;opacity: 0.9;background-size: cover;}
     .t{width:1000px;margin:0 auto;padding-top:180px;}
     .line{border-bottom: 2px solid;color: #000;}
     .desc{margin-top: 25px;text-align: center;color: rgba(0,0,0,.8);font-size: 45px;}
@@ -27,9 +27,10 @@
     .conLast{margin:100px 0;font-weight: bold;}
 </style>
 <script th:inline="javascript">
+    const limit = 12
     $(document).ready(function() {
         $.ajax({
-            url: "/post/scroll?page=0&size=1&sort=id,desc",
+            url: '/post/scroll?page=0&size='+limit+'&sort=id,desc',
             type: 'GET',
             dataType: 'json',
             success: function(res){
@@ -39,7 +40,6 @@
                     $('.c_desc').html('최근 등록된 글목록입니다.')
                 }
                 createHtml(res)
-                $(".post_desc").find("img").parent().remove()
             }
         })
     });
@@ -49,7 +49,7 @@
 
         for (let i = 0; i < array.length; i++) {
             let con = array[i]
-            let date = con.createdDate.substring(2, 10)
+            let date = con.createdDate.substring(2, 10).replaceAll('-', '.')
             const html = ''
                 +`<li>`
                     +`<a href="/post/detail/${con.id}">`
@@ -73,12 +73,11 @@
 
             if(last==false){
                 $.ajax({
-                    url: '/post/scroll?page='+page+'&size=1&sort=id,desc',
+                    url: '/post/scroll?page='+page+'&size='+limit+'&sort=id,desc',
                     type: 'GET',
                     dataType: 'json',
                     success: function(res){
                         createHtml(res)
-                        $(".post_desc").find("img").parent().remove()
                         page++
                         if(res.last==true){
                             last = true

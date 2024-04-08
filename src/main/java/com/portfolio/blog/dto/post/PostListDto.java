@@ -23,7 +23,7 @@ public class PostListDto {
     public PostListDto(Post entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.content = entity.getContent();
+        this.content = entity.getContent().replaceAll("<[^>]*>", ""); // html 태그 제거
         this.hit = entity.getHit();
         this.memberName = entity.getMember().getName();
         this.file = entity.getFiles().get(0);
