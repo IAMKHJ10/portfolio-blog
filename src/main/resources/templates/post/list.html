@@ -53,7 +53,7 @@
                     <a th:href="@{|/post/detail/${post.id}|(page=${list.number + 1})}">
                         <div class="c_img">
                             <img src="/images/no_img.png" alt="" th:if="${post.file==null}">
-                            <img th:src="@{${post.file.filePath}}" alt="" th:if="${post.file!=null}">
+                            <img th:src="${post.file.filePath}" alt="" th:if="${post.file!=null}">
                         </div>
                         <div class="c_cont">
                             <div class="c_hit">조회수 <span th:text="${post.hit}"></span></div>

@@ -54,16 +54,21 @@ public class PostService {
                 .orElseThrow(()-> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
         post.update(dto);
-
-        if(dto.getFile()!=null && !dto.getFile().isEmpty()){//파일 있으면
-            boolean result = fileService.delete(post.getFiles().get(0)); //실제파일 삭제성공 여부
-
-            if(result){//실제 파일 성공하고 새로운 받은 파일 업로드
-                fileService.saveWithPost(dto.getFile(), post);
-                return new MessageDto<>("ok", post.getId());
-            }else{
-                return new MessageDto<>("false");
+        
+        if(!post.getFiles().isEmpty()){//DB에 파일정보가 있으면
+            if(dto.getFile()!=null && !dto.getFile().isEmpty()){//업로드하는파일 있으면
+                boolean result = fileService.delete(post.getFiles().get(0)); //기존 업로드되어있던 실제파일 삭제성공 여부
+    
+                if(result){//삭제성공시 새로운 받은 파일 업로드
+                    fileService.saveWithPost(dto.getFile(), post);
+                    return new MessageDto<>("ok", post.getId());
+                }else{
+                    return new MessageDto<>("false");
+                }
             }
+        }else{
+            fileService.saveWithPost(dto.getFile(), post);
+            return new MessageDto<>("ok", post.getId());
         }
 
         return new MessageDto<>("ok", post.getId());
@@ -98,14 +103,16 @@ public class PostService {
                 .createdDate(post.getCreatedDate())
                 .lastModifiedDate(post.getLastModifiedDate())
                 .member(post.getMember())
-                .file(post.getFiles().get(0))
+                .file(post.getFiles().isEmpty()?null:post.getFiles().get(0))
                 .build();
     }
 
     @Transactional
     public MessageDto<?> delete(Long id) {
         Optional<Post> post = postRepository.findById(id);
-        fileService.delete(post.get().getFiles().get(0));
+        if(!post.get().getFiles().isEmpty()){
+            fileService.delete(post.get().getFiles().get(0));
+        }
         postRepository.deleteById(id);
         return new MessageDto<>("ok");
     }

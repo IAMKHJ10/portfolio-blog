@@ -50,10 +50,16 @@
         for (let i = 0; i < array.length; i++) {
             let con = array[i]
             let date = con.createdDate.substring(2, 10).replaceAll('-', '.')
+            let filePath;
+            if(con.file==null){
+                filePath = '/images/no_img.png'
+            }else{
+                filePath = con.file.filePath
+            }
             const html = ''
                 +`<li>`
                     +`<a href="/post/detail/${con.id}">`
-                        +`<div><img src="${con.file.filePath}"></div>`
+                        +`<div><img src="${filePath}"></div>`
                         +`<div class="post_title">${con.title}</div>`
                         +`<div class="post_desc">${con.content}</div>`
                         +`<div class="post_name">${con.memberName}</div>`

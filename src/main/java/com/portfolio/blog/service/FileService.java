@@ -20,8 +20,9 @@ public class FileService {
 
     private final FileRepository fileRepository;
     public static final String separator = java.io.File.separator;
-    public static final String fullPath = System.getProperty("user.dir")+separator+"src"+separator+"main"
-            +separator+"resources"+separator+"static"+separator+"files"+separator;
+    public static final String fullPath = System.getProperty("user.dir")
+            +separator+"src" + separator + "main" + separator + "resources" + separator + "static"
+            +separator+"files"+separator;
 
     @Transactional
     public void saveWithPost(MultipartFile file, Post post) throws IOException {

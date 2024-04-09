@@ -1,24 +1,11 @@
 spring:
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
-  servlet:
-    multipart:
-      maxFileSize: 5MB
   datasource:
-    url: ${MYSQL_DATABASE_URL}
-    username: ${MYSQL_DATABASE_USERNAME}
-    password: ${MYSQL_DATABASE_PASSWORD}
+    url: ${url}
+    username: ${username}
+    password: ${password}
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace

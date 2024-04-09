@@ -144,3 +144,4 @@ fabric.properties
 **/src/main/resources/static/files/**
 **/src/main/generated/**
 **/src/main/resources/application-dev.yml
+**/src/main/resources/application-prod.yml

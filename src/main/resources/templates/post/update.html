@@ -142,11 +142,11 @@
                 </div>
                 <label class="form-label fw-bold">썸네일</label>
                 <div class="input-group mb-3 addFile">
-                    <div th:if="${post.file == null}">
+                    <div th:remove="tag" th:if="${post.file == null}">
                         <input type="file" class="form-control" id="file" name="file">
                         <label class="input-group-text" for="file" >업로드</label>
                     </div>
-                    <div th:if="${post.file != null}">
+                    <div th:remove="tag" th:if="${post.file != null}">
                         <span th:text="${post.file.originFileName}"></span>
                         <span style="color:#f00;cursor:pointer;" onclick="delFile(this)">삭제</span>
                     </div>
