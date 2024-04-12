@@ -40,6 +40,12 @@
     .up{color:#4e84ff;}
     .del{color:#ff8282;}
     .writer{background-color: #e4f9ff;}
+    .likeWrap{width:768px;margin:160px auto 80px;text-align: center;}
+    .likeDiv{display: inline-block;width:70px;height:70px;}
+    .likeImg{width:100%;height:100%;}
+    .likeImg:hover{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);cursor:pointer;}
+    .likeText{font-weight:bold;font-size: 20px;color: #000;}
+    .like{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);}
 </style>
 <script th:inline="javascript">
     function list(){
@@ -151,6 +157,33 @@
         $('.comment_content').remove();
         $('.addStyle').remove();
     }
+
+    $('.likeDiv').click(function(){
+        $('.likeDiv').hide()
+    })
+
+    function like(){
+
+        $.ajax({
+            url: "/like/post",
+            data: $("#likeForm").serialize(),
+            type: 'POST',
+            success: function(res){
+                if(res.key=='noMember'){
+                    alert('로그인이 필요합니다.')
+                    location.href = '/login'
+                }else if(res.key=='noPost'){
+                    alert('작성된 글을 찾을 수 없습니다.')
+                    location.href = '/post/list?page='+[[${page}]]
+                }else if(res.key=='ok'){
+                    $('.likeImg').addClass('like')
+                }else if(res.key=='cancel'){
+                    $('.likeImg').removeClass('like')
+                }
+            }
+        })
+
+    }
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
@@ -173,6 +206,17 @@
         <button onclick="list()" type="button" class="">목록</button>
         <button onclick="update()" type="button" class="" th:if="${session.USER != null && session.USER.id==post.member.id}">수정</button>
         <button onclick="del()" type="button" class="" th:if="${session.USER != null && session.USER.id==post.member.id}">삭제</button>
+    </div>
+
+    <div class="likeWrap">
+        <form id="likeForm">
+            <input type="hidden" name="memberId" th:value="${session.USER == null ? '0' : session.USER.id}">
+            <input type="hidden" name="postId" th:if="${post.id != null}" th:value="${post.id}">
+        </form>
+        <div class="likeDiv" onclick="like()">
+            <img class="likeImg" src="/images/like.svg" alt="" th:classappend="${like == true} ? 'like' : ''"]>
+            <span class="likeText">좋아요</span>
+        </div>
     </div>
 
     <div class="comment">

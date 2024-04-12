@@ -40,6 +40,8 @@ public class QPost extends EntityPathBase<Post> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> LastModifiedDate = _super.LastModifiedDate;
 
+    public final ListPath<Likes, QLikes> likes = this.<Likes, QLikes>createList("likes", Likes.class, QLikes.class, PathInits.DIRECT2);
+
     public final QMember member;
 
     public final StringPath title = createString("title");

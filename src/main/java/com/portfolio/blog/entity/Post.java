@@ -48,6 +48,10 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<File> files = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Likes> likes = new ArrayList<>();
+
     public void update(PostUpdateDto dto) {
         this.title = dto.getTitle();
         this.content = dto.getContent();

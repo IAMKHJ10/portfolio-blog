@@ -4,8 +4,11 @@ import com.portfolio.blog.dto.MessageDto;
 import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.dto.post.PostUpdateDto;
+import com.portfolio.blog.dto.user.LoginSessionDto;
 import com.portfolio.blog.service.CommentService;
+import com.portfolio.blog.service.LikeService;
 import com.portfolio.blog.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,7 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final LikeService likeService;
 
     //글 쓰기 화면
     @GetMapping("/post/write")
@@ -76,11 +80,12 @@ public class PostController {
 
     //글 단건 조회
     @GetMapping("/post/detail/{id}")
-    public String findById(@PathVariable(name = "id") Long id, Model model, @PageableDefault(page = 1) Pageable pageable){
+    public String findById(@PathVariable(name = "id") Long id, Model model, @PageableDefault(page = 1) Pageable pageable, HttpServletRequest request){
         postService.updateHits(id);
         model.addAttribute("post", postService.findById(id));
         model.addAttribute("commentList", commentService.findAllByPost(id));
         model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("like", likeService.findByPostAndMember(id, (LoginSessionDto) request.getSession().getAttribute("USER")));
         return "post/detail";
     }
 
