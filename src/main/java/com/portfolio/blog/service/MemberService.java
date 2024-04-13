@@ -27,10 +27,10 @@ public class MemberService {
     public MessageDto<?> save(MemberSaveDto dto){
 
         Optional<Member> member = memberRepository.findByUid(dto.getUid());
+        if(member.isPresent()) return new MessageDto<>("duplicateUid");
 
-        if(member.isPresent()){
-            return new MessageDto<>("duplicate");
-        }
+        Optional<Member> email = memberRepository.findByEmail(dto.getEmail());
+        if(email.isPresent()) return new MessageDto<>("duplicateEmail");
 
         Member newMember = Member.builder()
                 .uid(dto.getUid())

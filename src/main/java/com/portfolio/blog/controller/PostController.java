@@ -86,6 +86,7 @@ public class PostController {
         model.addAttribute("commentList", commentService.findAllByPost(id));
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("like", likeService.findByPostAndMember(id, (LoginSessionDto) request.getSession().getAttribute("USER")));
+        model.addAttribute("likeCnt", likeService.countByPostIdAndStatus(id));
         return "post/detail";
     }
 

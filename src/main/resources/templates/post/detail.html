@@ -44,7 +44,7 @@
     .likeDiv{display: inline-block;width:70px;height:70px;}
     .likeImg{width:100%;height:100%;}
     .likeImg:hover{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);cursor:pointer;}
-    .likeText{font-weight:bold;font-size: 20px;color: #000;}
+    .likeText,.likeCount{font-weight:bold;font-size: 20px;color: #000;}
     .like{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);}
 </style>
 <script th:inline="javascript">
@@ -175,10 +175,15 @@
                 }else if(res.key=='noPost'){
                     alert('작성된 글을 찾을 수 없습니다.')
                     location.href = '/post/list?page='+[[${page}]]
-                }else if(res.key=='ok'){
+                }else if(res.key=='first'){
                     $('.likeImg').addClass('like')
-                }else if(res.key=='cancel'){
+                    $('.likeCount').html(res.data)
+                }else if(res.key=='true'){
+                    $('.likeImg').addClass('like')
+                    $('.likeCount').html(res.data)
+                }else if(res.key=='false'){
                     $('.likeImg').removeClass('like')
+                    $('.likeCount').html(res.data)
                 }
             }
         })
@@ -215,7 +220,7 @@
         </form>
         <div class="likeDiv" onclick="like()">
             <img class="likeImg" src="/images/like.svg" alt="" th:classappend="${like == true} ? 'like' : ''"]>
-            <span class="likeText">좋아요</span>
+            <span class="likeText">좋아요</span><span class="likeCount" th:text="${likeCnt}"></span>
         </div>
     </div>
 

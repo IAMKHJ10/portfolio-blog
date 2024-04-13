@@ -6,6 +6,7 @@ import com.portfolio.blog.dto.user.LoginSessionDto;
 import com.portfolio.blog.entity.Likes;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.entity.Post;
+import com.portfolio.blog.entity.common.Status;
 import com.portfolio.blog.repository.like.LikeRepository;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
@@ -35,17 +36,29 @@ public class LikeService {
         // 좋아요 누른 적 있는지 확인
         Optional<Likes> foundLikes = likeRepository.findByPostAndMember(post.get(), member.get());
 
-        if(foundLikes.isEmpty()){ // 좋아요 누른적 없음
+        String key;
+        if(foundLikes.isEmpty()){ // 해당 글에 처음 좋아요 누르면
             Likes likes = Likes.builder()
                     .post(post.get())
                     .member(member.get())
+                    .status(Status.TRUE)
                     .build();
             likeRepository.save(likes);
-            return new MessageDto<>("ok");
-        }else{ // 좋아요 누른 적 있음
-            likeRepository.delete(foundLikes.get());
-            return new MessageDto<>("cancel");
+            key = "first";
+        }else{ // 좋아요 누른적 있으면
+            if(foundLikes.get().getStatus().equals(Status.FALSE)){
+                foundLikes.get().changeStatus(Status.TRUE);
+                key = "true";
+            }else{
+                foundLikes.get().changeStatus(Status.FALSE);
+                key = "false";
+            }
         }
+
+        // 좋아요 총갯수
+        int cnt = countByPostIdAndStatus(post.get().getId());
+
+        return new MessageDto<>(key, cnt);
 
     }
 
@@ -54,8 +67,14 @@ public class LikeService {
         Optional<Post> post = postRepository.findById(postId);
         if(member.isPresent()&&post.isPresent()){
             Optional<Likes> likes = likeRepository.findByPostAndMember(post.get(), member.get());
-            return likes.isPresent();
+            if(likes.isPresent()){
+                return likes.get().getStatus().equals(Status.TRUE);
+            }
         }
         return false;
+    }
+
+    public int countByPostIdAndStatus(Long postId){
+        return likeRepository.countByPostIdAndStatus(postId, Status.TRUE);
     }
 }
