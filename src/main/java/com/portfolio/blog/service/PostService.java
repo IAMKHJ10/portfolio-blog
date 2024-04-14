@@ -82,10 +82,10 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostListDto> findAll(Pageable pageable) {
+    public Page<PostListDto> search(String keyword, Pageable pageable) {
         int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작
-        int pageLimit = 10; // 한페이지에 보여줄 글 개수
-        Page<Post> posts = postRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"id")));
+        int pageLimit = pageable.getPageSize(); // 한페이지에 보여줄 글 개수
+        Page<Post> posts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"id")));
         return posts
                 .map(PostListDto::new);
     }
@@ -110,8 +110,10 @@ public class PostService {
     @Transactional
     public MessageDto<?> delete(Long id) {
         Optional<Post> post = postRepository.findById(id);
-        if(!post.get().getFiles().isEmpty()){
-            fileService.delete(post.get().getFiles().get(0));
+        if(post.isPresent()){
+            if(!post.get().getFiles().isEmpty()){
+                fileService.delete(post.get().getFiles().get(0));
+            }
         }
         postRepository.deleteById(id);
         return new MessageDto<>("ok");

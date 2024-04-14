@@ -49,11 +49,11 @@
 </style>
 <script th:inline="javascript">
     function list(){
-        location.href = "/post/list?page="+[[${page}]]
+        location.href = "/post/list?page="+[[${page}]]+"&keyword="+[[${keyword}]]
     }
 
     function update(){
-        location.href = "/post/update/"+[[${post.id}]]+"?page="+[[${page}]]
+        location.href = "/post/update/"+[[${post.id}]]+"?page="+[[${page}]]+"&keyword="+[[${keyword}]]
     }
 
     function del(){

@@ -14,14 +14,22 @@
     .login_error{padding-left:20px;color:red;font-size:13px;}
 </style>
 <script th:inline="javascript">
+    function enter(){
+        if(window.event.keyCode == 13){
+            login()
+        }
+    }
+
     function login(){
 
         if($("#uid").val()==''){
             alert('아이디를 입력하세요.')
+            $("#uid").focus()
             return false
         }
         if($("#password").val()==''){
             alert('비밀번호를 입력하세요.')
+            $("#password").focus()
             return false
         }
 
@@ -49,10 +57,10 @@
                 <div class="l_title">BLOG</div>
                 <div class="login_box">
                     <div class="input_form">
-                        <input type="text" id="uid" name="uid" placeholder="ID">
+                        <input type="text" id="uid" name="uid" placeholder="ID" onkeydown="enter()">
                     </div>
                     <div class="input_form password">
-                        <input type="password" id="password" name="password" placeholder="Password">
+                        <input type="password" id="password" name="password" placeholder="Password" onkeydown="enter()">
                     </div>
                 </div>
                 <button type="button" class="login_btn" onclick="login()">로그인</button>

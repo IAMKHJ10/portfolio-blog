@@ -43,9 +43,10 @@ public class PostController {
 
     //글 수정 화면
     @GetMapping("/post/update/{id}")
-    public String update(@PathVariable(name = "id") Long id, Model model, @PageableDefault(page = 1) Pageable pageable){
+    public String update(@PathVariable(name = "id") Long id, Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword, @PageableDefault(page = 1) Pageable pageable){
         model.addAttribute("post", postService.findById(id));
         model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("keyword", keyword);
         return "post/update";
     }
 
@@ -58,9 +59,9 @@ public class PostController {
 
     //글 목록
     @GetMapping("/post/list")
-    public String list(@PageableDefault(page = 1, size = 10, direction = Sort.Direction.DESC) Pageable pageable, Model model){
+    public String list(@RequestParam(name = "keyword", defaultValue = "") String keyword, @PageableDefault(page = 1, size = 10, direction = Sort.Direction.DESC) Pageable pageable, Model model){
 
-        Page<PostListDto> list = postService.findAll(pageable);
+        Page<PostListDto> list = postService.search(keyword, pageable);
 
         /*
          * blockLimit : page 개수 설정
@@ -74,19 +75,22 @@ public class PostController {
         model.addAttribute("list", list);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("keyword", keyword);
 
         return "post/list";
     }
 
     //글 단건 조회
     @GetMapping("/post/detail/{id}")
-    public String findById(@PathVariable(name = "id") Long id, Model model, @PageableDefault(page = 1) Pageable pageable, HttpServletRequest request){
+    public String findById(@PathVariable(name = "id") Long id, Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword, @PageableDefault(page = 1) Pageable pageable, HttpServletRequest request){
         postService.updateHits(id);
         model.addAttribute("post", postService.findById(id));
         model.addAttribute("commentList", commentService.findAllByPost(id));
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("like", likeService.findByPostAndMember(id, (LoginSessionDto) request.getSession().getAttribute("USER")));
         model.addAttribute("likeCnt", likeService.countByPostIdAndStatus(id));
+        model.addAttribute("keyword", keyword);
+
         return "post/detail";
     }
 
