@@ -18,9 +18,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/js/**", "/images/**", "/favicon.ico", "/files/**")
+                .excludePathPatterns("/css/**", "/js/**", "/images/**", "/favicon.ico", "/files/**",
+                        "/webjars/**")
                 .excludePathPatterns("/", "/login", "/join", "/logout")
-                .excludePathPatterns("/post/list", "/post/detail/**", "/post/scroll", "/like/**");
+                .excludePathPatterns("/post/list", "/post/detail/**", "/post/scroll", "/like/**", "/chat/**",
+                        "/topic/**", "/app/**", "/queue/**");
     }
 
     @Override

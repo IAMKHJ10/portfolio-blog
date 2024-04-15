@@ -8,13 +8,12 @@ import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.entity.common.RoleType;
 import com.portfolio.blog.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
-
-import static com.portfolio.blog.config.SecurityConfig.passwordEncoder;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +21,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final FileService fileService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MessageDto<?> save(MemberSaveDto dto){
@@ -34,7 +34,7 @@ public class MemberService {
 
         Member newMember = Member.builder()
                 .uid(dto.getUid())
-                .password(passwordEncoder().encode(dto.getPassword())) // 비밀번호 암호화
+                .password(passwordEncoder.encode(dto.getPassword())) // 비밀번호 암호화
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .roleType(RoleType.USER)

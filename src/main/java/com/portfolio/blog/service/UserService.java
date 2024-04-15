@@ -6,18 +6,19 @@ import com.portfolio.blog.dto.user.LoginSessionDto;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.portfolio.blog.config.SecurityConfig.passwordEncoder;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MessageDto<?> login(LoginDto dto){
@@ -28,7 +29,7 @@ public class UserService {
             return new MessageDto<>("noMember");
         }
 
-        if(passwordEncoder().matches(dto.getPassword(), member.get().getPassword())){ // 비밀번호 맞으면
+        if(passwordEncoder.matches(dto.getPassword(), member.get().getPassword())){ // 비밀번호 맞으면
             LoginSessionDto loginMember = LoginSessionDto.builder()
                     .id(member.get().getId())
                     .uid(member.get().getUid())

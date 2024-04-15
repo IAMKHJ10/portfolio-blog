@@ -16,7 +16,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         log.info("==================== START ====================");
         log.info("===============================================");
-        log.info(" Request URI : " + request.getRequestURI());
+        log.info(" Request URI : {}", request.getRequestURI());
 
         HttpSession session = request.getSession();
         String url = request.getRequestURL().toString();
