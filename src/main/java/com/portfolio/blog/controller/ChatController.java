@@ -1,53 +1,36 @@
 package com.portfolio.blog.controller;
 
-import com.portfolio.blog.dto.chat.ChatRoomDto;
-import com.portfolio.blog.service.ChatService;
+import com.portfolio.blog.dto.chat.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/chat")
 public class ChatController {
 
-    private final ChatService chatService;
+    private final SimpMessageSendingOperations sendingOperations;
 
-    // 채팅 리스트 화면
-    @GetMapping("/room")
-    public String rooms(Model model) {
-        return "chat/room";
+    @MessageMapping("/chat/enter")
+    public void enter(ChatMessageDto dto) {
+        if(ChatMessageDto.MessageType.ENTER.equals(dto.getType()))
+            dto.setMessage(dto.getSender() + "님이 입장하였습니다.");
+        sendingOperations.convertAndSend("/sub/chat/" + dto.getRoomId(), dto);
     }
 
-    // 모든 채팅방 목록 반환
-    @ResponseBody
-    @GetMapping("/rooms")
-    public List<ChatRoomDto> room() {
-        return chatService.findAllRoom();
+    @MessageMapping("/chat/message")
+    public void message(ChatMessageDto dto) {
+        if(ChatMessageDto.MessageType.TALK.equals(dto.getType()))
+            dto.setMessage(dto.getSender() + " : " + dto.getMessage());
+        sendingOperations.convertAndSend("/sub/chat/"+dto.getRoomId(), dto);
     }
 
-    // 채팅방 생성
-    @ResponseBody
-    @PostMapping("/room")
-    public ChatRoomDto createRoom(@RequestParam(name = "name") String name) {
-        return chatService.createRoom(name);
-    }
-
-    // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable(name = "roomId") String roomId) {
-        model.addAttribute("roomId", roomId);
-        return "chat/roomDetail";
-    }
-
-    // 특정 채팅방 조회
-    @ResponseBody
-    @GetMapping("/room/{roomId}")
-    public ChatRoomDto roomInfo(@PathVariable(name = "roomId") String roomId) {
-        return chatService.findById(roomId);
+    @MessageMapping("/chat/leave")
+    public void leave(ChatMessageDto dto) {
+        if(ChatMessageDto.MessageType.LEAVE.equals(dto.getType()))
+            dto.setMessage(dto.getSender() + "님이 퇴장하였습니다.");
+        sendingOperations.convertAndSend("/sub/chat/"+dto.getRoomId(), dto);
     }
 
 }

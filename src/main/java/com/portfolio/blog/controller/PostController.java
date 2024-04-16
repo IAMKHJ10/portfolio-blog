@@ -5,6 +5,7 @@ import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.dto.post.PostUpdateDto;
 import com.portfolio.blog.dto.user.LoginSessionDto;
+import com.portfolio.blog.service.ChatService;
 import com.portfolio.blog.service.CommentService;
 import com.portfolio.blog.service.LikeService;
 import com.portfolio.blog.service.PostService;
@@ -27,6 +28,7 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final LikeService likeService;
+    private final ChatService chatService;
 
     //글 쓰기 화면
     @GetMapping("/post/write")
@@ -90,6 +92,7 @@ public class PostController {
         model.addAttribute("like", likeService.findByPostAndMember(id, (LoginSessionDto) request.getSession().getAttribute("USER")));
         model.addAttribute("likeCnt", likeService.countByPostIdAndStatus(id));
         model.addAttribute("keyword", keyword);
+        model.addAttribute("chat", chatService.findById(id));
 
         return "post/detail";
     }

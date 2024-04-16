@@ -21,8 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/css/**", "/js/**", "/images/**", "/favicon.ico", "/files/**",
                         "/webjars/**")
                 .excludePathPatterns("/", "/login", "/join", "/logout")
-                .excludePathPatterns("/post/list", "/post/detail/**", "/post/scroll", "/like/**", "/chat/**",
-                        "/topic/**", "/app/**", "/queue/**");
+                .excludePathPatterns("/post/list", "/post/detail/**", "/post/scroll", "/like/**");
     }
 
     @Override

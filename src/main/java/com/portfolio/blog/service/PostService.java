@@ -24,6 +24,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final FileService fileService;
+    private final ChatService chatService;
 
     @Transactional
     public MessageDto<?> save(PostSaveDto dto) throws IOException {
@@ -41,7 +42,7 @@ public class PostService {
 
             Post post = postRepository.save(newPost);
             fileService.saveWithPost(dto.getFile(), post);
-
+            chatService.createRoom(newPost.getId()); // 채팅방 생성
             return new MessageDto<>("ok", newPost.getId());
         }else{ // 글쓴이가 삭제된 상태
             return new MessageDto<>("no");

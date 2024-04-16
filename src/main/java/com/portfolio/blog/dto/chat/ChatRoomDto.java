@@ -10,6 +10,6 @@ import lombok.Setter;
 public class ChatRoomDto {
 
     private String roomId;
-    private String roomName;
+    private long userCount;
 
 }

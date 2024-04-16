@@ -4,16 +4,15 @@
 <style>
     *{font-family: -apple-system;}
     .t{width:768px;margin:0 auto;margin-top: 160px;}
-    .c{width:768px;margin:0 auto;}
+    .c{width:768px;margin: 40px auto 100px;border-top: 1px solid #dbdbdb;border-bottom: 1px solid #dbdbdb;}
     .t_title{font-size:48px;color:#212529;line-height: 1.5;font-weight: 800;margin-bottom:32px;}
     .t_name{font-size:16px;color:#212529;font-weight: bold;}
     .t_date{color:#495057;}
     .t_hit{float: right;}
-    .c_con{margin:80px 0;line-height: 1.7;color:#212529;font-size:18px;min-height: 350px;}
+    .c_con{margin: 60px auto;line-height: 1.7;color:#212529;font-size:18px;min-height: 350px;}
     .detail_btn{text-align: center;font-size:15px;}
     .detail_btn>button{border: 0;background-color:#0a0a0a;color:#fff;margin:0 15px;border-radius: 5px;padding: 5px 15px;}
-    .comment{width:768px;margin:160px auto 80px;}
-    .comment_solid{border-top: 1px solid #dbdbdb;padding-top: 5rem;margin-bottom: 1rem;}
+    .comment{width:768px;margin:50px auto 80px;}
     .comment_content_origin{resize: none;width: 100%;height:100px;border: 1px solid #F1F3F5;padding: 16px 16px 24px;border-radius: 4px;color:#212529;margin-bottom:24px;}
     .comment_content{resize: none;width: 100%;height:100px;border: 1px solid #F1F3F5;padding: 16px 16px 24px;border-radius: 4px;color:#212529;}
     .comment_save_btn{border:0;background-color:#0a0a0a;color:#fff;border-radius: 4px;font-size: 16px;font-weight: bold;float: right;padding: 4px 20px;}
@@ -40,12 +39,13 @@
     .up{color:#4e84ff;}
     .del{color:#ff8282;}
     .writer{background-color: #e4f9ff;}
-    .likeWrap{width:768px;margin:160px auto 80px;text-align: center;}
+    .likeWrap{width:768px;margin:100px auto 0;text-align: center;}
     .likeDiv{display: inline-block;width:70px;height:70px;}
     .likeImg{width:100%;height:100%;}
     .likeImg:hover{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);cursor:pointer;}
     .likeText,.likeCount{font-weight:bold;font-size: 20px;color: #000;}
     .like{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);}
+    .comment_info_wrap{margin-bottom: 200px;}
 </style>
 <script th:inline="javascript">
     function list(){
@@ -195,6 +195,61 @@
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
 
     <div class="t">
+
+
+
+        <script th:inline="javascript">
+            let userName
+
+            function enter(){
+
+
+
+
+
+
+
+            }
+
+            function send(){
+                let roomId = $('#roomId').val()
+                let sockJs = new SockJS('/stomp/chat')
+                let stomp = Stomp.over(sockJs)
+
+                stomp.connect({}, function (){
+                    console.log("STOMP 연결완료")
+                })
+
+                stomp.subscribe("/sub/chat/" + roomId, function (chat) {
+                    let content = JSON.parse(chat.body);
+                    let sender = content.sender;
+                    let message = content.message;
+                    let html = ''
+                    if(sender==userName){
+                        html = `${message}\n`
+                    }else{
+                        html = `${message}\n`
+                    }
+                    $("#chatArea").append(html);
+                })
+                stomp.send('/pub/chat/enter', {}, JSON.stringify({type: 'ENTER', roomId: roomId, sender: userName}))
+
+                stomp.send('/pub/chat/message', {}, JSON.stringify({type: 'TALK', roomId: roomId, message: $('#chatName').val(), sender: username}));
+                $('#chatText').val('')
+            }
+        </script>
+        <div class="mb-3">
+            <input type="hidden" id="roomId" th:if="${chat!=null}" th:value="${chat.name}">
+            <input type="hidden" id="chatNick">
+            <label for="chatArea" class="form-label"></label>
+            <textarea class="form-control" id="chatArea" rows="3"></textarea>
+            <button type="button" onclick="enter()">채팅 입장</button>
+            <input type="text" name="chatText" id="chatText"><button type="button" onclick="send()">전송</button>
+        </div>
+
+
+
+
         <div class="t_con">
             <div class="t_title" th:text="${post.title}"></div>
             <span class="t_name" th:text="${post.member.name}"></span>
@@ -225,7 +280,6 @@
     </div>
 
     <div class="comment">
-        <div class="comment_solid"></div>
         <div class="comment_form">
             <form id="commentForm">
                 <input type="hidden" id="user" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
