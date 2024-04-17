@@ -46,6 +46,7 @@
     .likeText,.likeCount{font-weight:bold;font-size: 20px;color: #000;}
     .like{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);}
     .comment_info_wrap{margin-bottom: 200px;}
+    .chatArea{resize:none;height: 155px;}
 </style>
 <script th:inline="javascript">
     function list(){
@@ -202,7 +203,7 @@
             name : userName
         }
         stompClient.connect({}, function (chat){
-            setConnected(true)
+            $("#enter").attr('disabled', true)
             console.log("STOMP 연결완료")
 
             stompClient.subscribe("/sub/chat/" + roomId, function (chat) {
@@ -211,33 +212,38 @@
                 //let type = content.type
                 //let sender = content.sender
                 let message = content.message
-                $("#chatArea").append(message+"\n")
+                let html = ``
+                    +`<div class="addChat">${message}</div>`
+                $("#chatArea").append(html)
+                if($('.addChat').length>6){
+                    $('.addChat').first().remove()
+                }
             })
 
             stompClient.send('/pub/chat/enter', {}, JSON.stringify({type: 'ENTER', roomId: roomId, sender: userName}))
             $('#chatText').val('')
+
         })
     }
 
     function leave(){
         stompClient.send('/pub/chat/leave', {}, JSON.stringify({type: 'LEAVE', roomId: roomId, sender: userName}))
         stompClient.disconnect()
-        setConnected(false)
-    }
-
-    function send(){
-        if($.trim($('#chatText').val())==''){
-            alert('내용을 입력하세요.')
-            $('#chatText').focus()
-            return false
-        }
-        stompClient.send('/pub/chat/message', {}, JSON.stringify({type: 'TALK', roomId: roomId, message: $('#chatText').val(), sender: userName}))
         $('#chatText').val('')
     }
 
-    function enterSend(){
+    function send(){
         if(window.event.keyCode == 13){
-            send()
+            if($("#enter").attr('disabled')=='disabled'){
+                if($.trim($('#chatText').val())==''){
+                    alert('내용을 입력하세요.')
+                    $('#chatText').focus()
+                    return false
+                }
+
+                stompClient.send('/pub/chat/message', {}, JSON.stringify({type: 'TALK', roomId: roomId, message: $('#chatText').val(), sender: userName}))
+                $('#chatText').val('')
+            }
         }
     }
 
@@ -251,15 +257,7 @@
         return user
     }
 
-    function setConnected(connected) {
-        $('#enter').prop('disabled', connected)
-        $('#leave').prop('disabled', !connected)
-        $('#send').prop('disabled', !connected)
-    }
-
     $(function(){
-        $('#leave').prop('disabled', true)
-        $('#send').prop('disabled', true)
         window.addEventListener('beforeunload', function () { //현재 페이지를 떠나거나 브라우저를 종료하려 할 때
             leave() //채팅 연결 종료
         })
@@ -270,18 +268,19 @@
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
 
     <div class="t">
-
-        <div class="mb-3">
+        <div class="mb-3" th:if="${chat!=null}">
             <input type="hidden" id="roomId" th:if="${chat!=null}" th:value="${chat.name}">
             <input type="hidden" id="userName" th:if="${session.USER!=null}" th:value="${session.USER.uid}">
-            <label for="chatArea" class="form-label"></label>
-            <textarea class="form-control" id="chatArea" rows="5" style="resize:none;"></textarea>
-            <button type="button" id="enter" onclick="enter()">입장</button>
-            <button type="button" id="leave" onclick="leave()">퇴장</button>
-            <input type="text" id="chatText" onkeydown="enterSend()">
-            <button type="button" id="send" onclick="send()">전송</button>
+            <div class="form-control chatArea" id="chatArea"></div>
+            <div class="d-flex justify-content-evenly mt-1">
+                <div class="col-2">
+                    <button type="button" class="btn btn-outline-primary" id="enter" onclick="enter()">채팅 시작</button>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control" id="chatText" onkeydown="send()">
+                </div>
+            </div>
         </div>
-
         <div class="t_con">
             <div class="t_title" th:text="${post.title}"></div>
             <span class="t_name" th:text="${post.member.name}"></span>
