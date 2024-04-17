@@ -1,6 +1,8 @@
 package com.portfolio.blog.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -8,12 +10,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry){
         // endpoint 설정 : /stomp/chat
         // setAllowedOrigins("*")는 모든 ip에서 접속 가능하도록 해줌
+        // withSockJS 낮은 버전 브라우저도 사용할 수 있도록.
         registry.addEndpoint("/stomp/chat").setAllowedOriginPatterns("*").withSockJS();
     }
 

@@ -70,13 +70,11 @@
     }
 
     function commentSave(is){
-
         const user = $('#user').val()
-
         if(user==undefined){
             alert('로그인이 필요합니다.')
             location.href = '/login'
-            return false;
+            return false
         }
 
         let data;
@@ -189,6 +187,83 @@
         })
 
     }
+
+    <!--채팅-->
+    let stompClient
+    let roomId
+    let userName
+
+    function enter(){
+        userName = loginChk()
+        roomId = $('#roomId').val()
+        let sockJs = new SockJS('/stomp/chat')
+        stompClient = Stomp.over(sockJs)
+        let headers = {
+            name : userName
+        }
+        stompClient.connect({}, function (chat){
+            setConnected(true)
+            console.log("STOMP 연결완료")
+
+            stompClient.subscribe("/sub/chat/" + roomId, function (chat) {
+                let content = JSON.parse(chat.body)
+                console.log(content)
+                //let type = content.type
+                //let sender = content.sender
+                let message = content.message
+                $("#chatArea").append(message+"\n")
+            })
+
+            stompClient.send('/pub/chat/enter', {}, JSON.stringify({type: 'ENTER', roomId: roomId, sender: userName}))
+            $('#chatText').val('')
+        })
+    }
+
+    function leave(){
+        stompClient.send('/pub/chat/leave', {}, JSON.stringify({type: 'LEAVE', roomId: roomId, sender: userName}))
+        stompClient.disconnect()
+        setConnected(false)
+    }
+
+    function send(){
+        if($.trim($('#chatText').val())==''){
+            alert('내용을 입력하세요.')
+            $('#chatText').focus()
+            return false
+        }
+        stompClient.send('/pub/chat/message', {}, JSON.stringify({type: 'TALK', roomId: roomId, message: $('#chatText').val(), sender: userName}))
+        $('#chatText').val('')
+    }
+
+    function enterSend(){
+        if(window.event.keyCode == 13){
+            send()
+        }
+    }
+
+    function loginChk(){
+        const user = $('#userName').val()
+        if(user==undefined){
+            alert('로그인이 필요합니다.')
+            location.href = '/login'
+            return false
+        }
+        return user
+    }
+
+    function setConnected(connected) {
+        $('#enter').prop('disabled', connected)
+        $('#leave').prop('disabled', !connected)
+        $('#send').prop('disabled', !connected)
+    }
+
+    $(function(){
+        $('#leave').prop('disabled', true)
+        $('#send').prop('disabled', true)
+        window.addEventListener('beforeunload', function () { //현재 페이지를 떠나거나 브라우저를 종료하려 할 때
+            leave() //채팅 연결 종료
+        })
+    })
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
@@ -196,59 +271,16 @@
 
     <div class="t">
 
-
-
-        <script th:inline="javascript">
-            let userName
-
-            function enter(){
-
-
-
-
-
-
-
-            }
-
-            function send(){
-                let roomId = $('#roomId').val()
-                let sockJs = new SockJS('/stomp/chat')
-                let stomp = Stomp.over(sockJs)
-
-                stomp.connect({}, function (){
-                    console.log("STOMP 연결완료")
-                })
-
-                stomp.subscribe("/sub/chat/" + roomId, function (chat) {
-                    let content = JSON.parse(chat.body);
-                    let sender = content.sender;
-                    let message = content.message;
-                    let html = ''
-                    if(sender==userName){
-                        html = `${message}\n`
-                    }else{
-                        html = `${message}\n`
-                    }
-                    $("#chatArea").append(html);
-                })
-                stomp.send('/pub/chat/enter', {}, JSON.stringify({type: 'ENTER', roomId: roomId, sender: userName}))
-
-                stomp.send('/pub/chat/message', {}, JSON.stringify({type: 'TALK', roomId: roomId, message: $('#chatName').val(), sender: username}));
-                $('#chatText').val('')
-            }
-        </script>
         <div class="mb-3">
             <input type="hidden" id="roomId" th:if="${chat!=null}" th:value="${chat.name}">
-            <input type="hidden" id="chatNick">
+            <input type="hidden" id="userName" th:if="${session.USER!=null}" th:value="${session.USER.uid}">
             <label for="chatArea" class="form-label"></label>
-            <textarea class="form-control" id="chatArea" rows="3"></textarea>
-            <button type="button" onclick="enter()">채팅 입장</button>
-            <input type="text" name="chatText" id="chatText"><button type="button" onclick="send()">전송</button>
+            <textarea class="form-control" id="chatArea" rows="5" style="resize:none;"></textarea>
+            <button type="button" id="enter" onclick="enter()">입장</button>
+            <button type="button" id="leave" onclick="leave()">퇴장</button>
+            <input type="text" id="chatText" onkeydown="enterSend()">
+            <button type="button" id="send" onclick="send()">전송</button>
         </div>
-
-
-
 
         <div class="t_con">
             <div class="t_title" th:text="${post.title}"></div>
