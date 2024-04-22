@@ -1,4 +1,4 @@
-package com.portfolio.blog.dto.member;
+package com.portfolio.blog.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;

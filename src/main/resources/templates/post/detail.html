@@ -47,6 +47,7 @@
     .like{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);}
     .comment_info_wrap{margin-bottom: 200px;}
     .chatArea{resize:none;height: 155px;}
+    .chatTitle{font-weight:bold;}
 </style>
 <script th:inline="javascript">
     function list(){
@@ -268,6 +269,7 @@
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
 
     <div class="t">
+        <div class="chatTitle" th:if="${chat!=null}">실시간 채팅</div>
         <div class="mb-3" th:if="${chat!=null}">
             <input type="hidden" id="roomId" th:if="${chat!=null}" th:value="${chat.name}">
             <input type="hidden" id="userName" th:if="${session.USER!=null}" th:value="${session.USER.uid}">

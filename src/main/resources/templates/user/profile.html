@@ -10,13 +10,15 @@
     $(document).ready(function() {
         $('.bar').find('a[href="' + document.location.pathname + '"]').addClass('active')
     });
-
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
     <div class="a">
         <ul class="nav nav-tabs bar">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/myPage/info/{uid}(uid = ${member.uid})}">기본 정보</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/myPage/profile/{uid}(uid = ${member.uid})}">프로필 이미지</a>
             </li>

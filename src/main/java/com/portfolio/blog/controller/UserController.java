@@ -1,7 +1,8 @@
 package com.portfolio.blog.controller;
 
 import com.portfolio.blog.dto.MessageDto;
-import com.portfolio.blog.dto.member.ChangeProfileDto;
+import com.portfolio.blog.dto.user.ChangePasswordDto;
+import com.portfolio.blog.dto.user.ChangeProfileDto;
 import com.portfolio.blog.dto.user.LoginDto;
 import com.portfolio.blog.service.MemberService;
 import com.portfolio.blog.service.UserService;
@@ -53,6 +54,18 @@ public class UserController {
         return "redirect:/user/login";
     }
 
+    @GetMapping("/myPage/info/{uid}")
+    public String info(@PathVariable(name = "uid") String uid, Model model){
+        model.addAttribute("member", memberService.findByUid(uid));
+        return "user/info";
+    }
+
+    @ResponseBody
+    @PostMapping("/changePw")
+    public MessageDto<?> changePassword(@ModelAttribute ChangePasswordDto dto) {
+        return userService.changePassword(dto);
+    }
+
     @GetMapping("/myPage/profile/{uid}")
     public String profile(@PathVariable(name = "uid") String uid, Model model){
         model.addAttribute("member", memberService.findByUid(uid));
@@ -61,7 +74,7 @@ public class UserController {
 
     @PostMapping("/upload/profile")
     public String profile(ChangeProfileDto dto) throws IOException {
-        memberService.changeProfile(dto);
+        userService.changeProfile(dto);
         return "redirect:/myPage/profile/"+dto.getMemberUid();
     }
 

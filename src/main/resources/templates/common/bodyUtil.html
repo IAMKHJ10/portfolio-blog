@@ -13,7 +13,7 @@
     </style>
     <div class="authAll">
         <a class="authLog" href="/login" th:if="${session.USER==null}">로그인</a>
-        <a class="header_profile me-3" th:href="@{/myPage/profile/{uid}(uid = ${session.USER.uid})}" th:if="${session.USER!=null}">
+        <a class="header_profile me-3" th:href="@{/myPage/info/{uid}(uid = ${session.USER.uid})}" th:if="${session.USER!=null}">
             <img src="/images/profile.jpg" class="img-thumbnail" alt="" th:if="${session.USER!=null && #lists.isEmpty(session.USER.files)}">
             <img th:each="file : ${session.USER.files}" th:src="@{${file.filePath}}" class="img-thumbnail" th:if="${session.USER!=null && !#lists.isEmpty(session.USER.files)}">
             <span class="authName"  th:text="${session.USER.name}"></span>

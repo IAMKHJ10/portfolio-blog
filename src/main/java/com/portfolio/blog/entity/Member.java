@@ -47,4 +47,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<File> files = new ArrayList<>();
 
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
 }

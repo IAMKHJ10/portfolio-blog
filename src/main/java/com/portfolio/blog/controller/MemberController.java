@@ -32,7 +32,6 @@ public class MemberController {
     @ResponseBody
     @PostMapping("/join")
     public MessageDto<?> save(@ModelAttribute MemberSaveDto memberSaveDto){
-
         return memberService.save(memberSaveDto);
     }
 
