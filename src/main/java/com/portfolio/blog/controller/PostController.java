@@ -5,10 +5,7 @@ import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.dto.post.PostUpdateDto;
 import com.portfolio.blog.dto.user.LoginSessionDto;
-import com.portfolio.blog.service.ChatService;
-import com.portfolio.blog.service.CommentService;
-import com.portfolio.blog.service.LikeService;
-import com.portfolio.blog.service.PostService;
+import com.portfolio.blog.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,10 +26,12 @@ public class PostController {
     private final CommentService commentService;
     private final LikeService likeService;
     private final ChatService chatService;
+    private final CategoryService categoryService;
 
     //글 쓰기 화면
     @GetMapping("/post/write")
     public String write(Model model){
+        model.addAttribute("categoryList", categoryService.findAll());
         return "post/write";
     }
 

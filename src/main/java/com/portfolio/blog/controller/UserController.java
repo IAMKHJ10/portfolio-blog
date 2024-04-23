@@ -4,6 +4,7 @@ import com.portfolio.blog.dto.MessageDto;
 import com.portfolio.blog.dto.user.ChangePasswordDto;
 import com.portfolio.blog.dto.user.ChangeProfileDto;
 import com.portfolio.blog.dto.user.LoginDto;
+import com.portfolio.blog.service.CategoryService;
 import com.portfolio.blog.service.MemberService;
 import com.portfolio.blog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final MemberService memberService;
+    private final CategoryService categoryService;
 
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request){
@@ -80,6 +82,13 @@ public class UserController {
     public String profile(ChangeProfileDto dto) throws IOException {
         userService.changeProfile(dto);
         return "redirect:/myPage/profile/"+dto.getMemberUid();
+    }
+
+    @GetMapping("/myPage/category/{uid}")
+    public String category(@PathVariable(name = "uid") String uid, Model model){
+        model.addAttribute("member", memberService.findByUid(uid));
+        model.addAttribute("categoryList", categoryService.findAll());
+        return "user/category";
     }
 
 }
