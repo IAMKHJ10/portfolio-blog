@@ -62,8 +62,12 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/changePw")
-    public MessageDto<?> changePassword(@ModelAttribute ChangePasswordDto dto) {
-        return userService.changePassword(dto);
+    public MessageDto<?> changePassword(@ModelAttribute ChangePasswordDto dto, HttpSession session) {
+        MessageDto<?> result = userService.changePassword(dto);
+        if(result.getKey().equals("ok")){
+            session.invalidate();
+        }
+        return result;
     }
 
     @GetMapping("/myPage/profile/{uid}")

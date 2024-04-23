@@ -48,7 +48,7 @@
             success: function(res){
                 if(res.key=='ok'){
                     alert('비밀번호가 변경되었습니다.')
-                    location.href = '/logout'
+                    location.href = '/'
                 }else if(res.key=='wrong'){
                     alert('현재 비밀번호를 틀렸습니다.')
                     $("#pw").val('')

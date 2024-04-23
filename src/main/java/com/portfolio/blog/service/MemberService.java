@@ -26,15 +26,17 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByUid(dto.getUid());
         if(member.isPresent()) return new MessageDto<>("duplicateUid");
 
-        Optional<Member> email = memberRepository.findByEmail(dto.getEmail());
-        if(email.isPresent()) return new MessageDto<>("duplicateEmail");
+        if(dto.getRoleType().equals(RoleType.ADMIN)){
+            Optional<Member> email = memberRepository.findByEmail(dto.getEmail());
+            if(email.isPresent()) return new MessageDto<>("duplicateEmail");
+        }
 
         Member newMember = Member.builder()
                 .uid(dto.getUid())
                 .password(passwordEncoder.encode(dto.getPassword())) // 비밀번호 암호화
                 .name(dto.getName())
                 .email(dto.getEmail())
-                .roleType(RoleType.USER)
+                .roleType(dto.getRoleType().equals(RoleType.ADMIN)?RoleType.ADMIN:RoleType.USER)
                 .build();
 
         memberRepository.save(newMember);
@@ -52,6 +54,7 @@ public class MemberService {
                 .uid(member.getUid())
                 .name(member.getName())
                 .email(member.getEmail())
+                .roleType(member.getRoleType())
                 .file(member.getFiles().isEmpty()?null:member.getFiles().get(0))
                 .build();
     }

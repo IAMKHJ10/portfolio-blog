@@ -20,11 +20,9 @@ public class MemberController {
     // 회원가입 view
     @GetMapping("/join")
     public String save(HttpSession session){
-
         if(session.getAttribute("USER")!=null){
             return "redirect:/";
         }
-
         return "member/join";
     }
 
@@ -33,6 +31,15 @@ public class MemberController {
     @PostMapping("/join")
     public MessageDto<?> save(@ModelAttribute MemberSaveDto memberSaveDto){
         return memberService.save(memberSaveDto);
+    }
+
+    // admin 회원가입 view
+    @GetMapping("/admin/join")
+    public String adminSave(HttpSession session){
+        if(session.getAttribute("USER")!=null){
+            return "redirect:/";
+        }
+        return "member/adminJoin";
     }
 
 }

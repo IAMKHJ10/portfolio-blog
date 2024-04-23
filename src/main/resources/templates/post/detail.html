@@ -200,18 +200,15 @@
         roomId = $('#roomId').val()
         let sockJs = new SockJS('/stomp/chat')
         stompClient = Stomp.over(sockJs)
-        let headers = {
-            name : userName
-        }
+
         stompClient.connect({}, function (chat){
             $("#enter").attr('disabled', true)
             console.log("STOMP 연결완료")
 
             stompClient.subscribe("/sub/chat/" + roomId, function (chat) {
                 let content = JSON.parse(chat.body)
-                console.log(content)
-                //let type = content.type
-                //let sender = content.sender
+                let type = content.type
+                let sender = content.sender
                 let message = content.message
                 let html = ``
                     +`<div class="addChat">${message}</div>`
@@ -221,14 +218,14 @@
                 }
             })
 
-            stompClient.send('/pub/chat/enter', {}, JSON.stringify({type: 'ENTER', roomId: roomId, sender: userName}))
+            stompClient.send('/pub/chat', {}, JSON.stringify({type: 'ENTER', roomId: roomId, sender: userName}))
             $('#chatText').val('')
 
         })
     }
 
     function leave(){
-        stompClient.send('/pub/chat/leave', {}, JSON.stringify({type: 'LEAVE', roomId: roomId, sender: userName}))
+        stompClient.send('/pub/chat', {}, JSON.stringify({type: 'LEAVE', roomId: roomId, sender: userName}))
         stompClient.disconnect()
         $('#chatText').val('')
     }
@@ -236,14 +233,16 @@
     function send(){
         if(window.event.keyCode == 13){
             if($("#enter").attr('disabled')=='disabled'){
-                if($.trim($('#chatText').val())==''){
+                if($('#chatText').val()==''){
                     alert('내용을 입력하세요.')
                     $('#chatText').focus()
                     return false
                 }
 
-                stompClient.send('/pub/chat/message', {}, JSON.stringify({type: 'TALK', roomId: roomId, message: $('#chatText').val(), sender: userName}))
+                stompClient.send('/pub/chat', {}, JSON.stringify({type: 'TALK', roomId: roomId, message: $('#chatText').val(), sender: userName}))
                 $('#chatText').val('')
+            }else {
+                alert('채팅 시작을 눌러주세요.')
             }
         }
     }

@@ -20,7 +20,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**", "/js/**", "/images/**", "/favicon.ico", "/files/**")
                 .excludePathPatterns("/", "/login", "/join", "/logout")
-                .excludePathPatterns("/post/list", "/post/detail/**", "/post/scroll", "/like/**");
+                .excludePathPatterns("/post/list", "/post/detail/**", "/post/scroll", "/like/**")
+                .excludePathPatterns("/admin/**");
     }
 
     @Override
