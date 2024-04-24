@@ -108,7 +108,7 @@
         <div class="line"></div>
         <div class="desc">나만의 글을 작성해보세요.</div>
         <div style="text-align: center;">
-            <a class="start" href="/post/list">시작하기</a>
+            <a class="start" th:href="@{/post/list(category=${categoryList[0].name})}">시작하기</a>
         </div>
     </div>
     <div class="c">

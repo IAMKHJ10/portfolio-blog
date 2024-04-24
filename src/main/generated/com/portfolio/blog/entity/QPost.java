@@ -24,6 +24,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public final com.portfolio.blog.entity.common.QBaseEntity _super = new com.portfolio.blog.entity.common.QBaseEntity(this);
 
+    public final StringPath category = createString("category");
+
     public final ListPath<Comment, QComment> comments = this.<Comment, QComment>createList("comments", Comment.class, QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");

@@ -18,4 +18,5 @@ public class PostDetailDto {
     private LocalDateTime lastModifiedDate;
     private Member member;
     private File file;
+    private String category;
 }

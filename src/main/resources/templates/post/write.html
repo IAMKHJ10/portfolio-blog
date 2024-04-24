@@ -138,9 +138,9 @@
             <input type="hidden" name="memberId" th:if="${session.USER != null}" th:value="${session.USER.id}">
             <div>
                 <label class="form-label fw-bold">카테고리</label>
-                <select class="form-select mb-3" aria-label="Default select example" id="category" name="categoryId">
+                <select class="form-select mb-3" aria-label="Default select example" id="category" name="category">
                     <option value="" selected>선택</option>
-                    <option th:each="category:${categoryList}" th:value="${category.id}" th:text="${category.name}"></option>
+                    <option th:each="category:${categoryList}" th:value="${category.name}" th:text="${category.name}"></option>
                 </select>
                 <div class="mb-3">
                     <label for="title" class="form-label fw-bold">제목</label>

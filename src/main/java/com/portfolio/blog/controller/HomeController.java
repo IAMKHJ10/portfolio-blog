@@ -1,6 +1,7 @@
 package com.portfolio.blog.controller;
 
 import com.portfolio.blog.dto.post.PostListDto;
+import com.portfolio.blog.service.CategoryService;
 import com.portfolio.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 
     private final PostService postService;
+    private final CategoryService categoryService;
 
     @GetMapping("/")
     public String home(Model model){
+        model.addAttribute("categoryList", categoryService.findAll());
         return "main";
     }
 

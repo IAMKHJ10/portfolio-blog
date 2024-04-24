@@ -7,6 +7,7 @@ import com.portfolio.blog.dto.post.PostSaveDto;
 import com.portfolio.blog.dto.post.PostUpdateDto;
 import com.portfolio.blog.entity.Member;
 import com.portfolio.blog.entity.Post;
+import com.portfolio.blog.repository.category.CategoryRepository;
 import com.portfolio.blog.repository.member.MemberRepository;
 import com.portfolio.blog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final FileService fileService;
     private final ChatService chatService;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public MessageDto<?> save(PostSaveDto dto) throws IOException {
@@ -38,6 +40,7 @@ public class PostService {
                     .title(dto.getTitle())
                     .content(dto.getContent())
                     .member(memberEntity)
+                    .category(dto.getCategory())
                     .build();
 
             Post post = postRepository.save(newPost);
@@ -83,10 +86,10 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostListDto> search(String keyword, Pageable pageable) {
+    public Page<PostListDto> search(String category, String keyword, Pageable pageable) {
         int page = pageable.getPageNumber() - 1; // page 위치에 있는 값은 0부터 시작
         int pageLimit = pageable.getPageSize(); // 한페이지에 보여줄 글 개수
-        Page<Post> posts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC,"id")));
+        Page<Post> posts = postRepository.postListSearch(category, keyword, PageRequest.of(page, pageLimit));
         return posts
                 .map(PostListDto::new);
     }
@@ -105,6 +108,7 @@ public class PostService {
                 .lastModifiedDate(post.getLastModifiedDate())
                 .member(post.getMember())
                 .file(post.getFiles().isEmpty()?null:post.getFiles().get(0))
+                .category(post.getCategory())
                 .build();
     }
 

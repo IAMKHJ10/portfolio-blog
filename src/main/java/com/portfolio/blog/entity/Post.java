@@ -52,9 +52,12 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Likes> likes = new ArrayList<>();
 
+    private String category;
+
     public void update(PostUpdateDto dto) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
+        this.category = dto.getCategory();
     }
 
 }

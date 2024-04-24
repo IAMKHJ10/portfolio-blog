@@ -1,7 +1,13 @@
 package com.portfolio.blog.repository.post;
 
+import com.portfolio.blog.entity.Post;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import static com.portfolio.blog.entity.QPost.post;
 
@@ -19,4 +25,28 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public Page<Post> postListSearch(String category, String keyword, Pageable pageable) {
+        List<Post> posts = jpaQueryFactory
+                .selectFrom(post)
+                .where(
+                        (post.category.eq(category).and(post.title.contains(keyword)))
+                                .or(post.category.eq(category).and(post.content.contains(keyword)))
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(post.id.desc())
+                .fetch();
+
+        Long count = jpaQueryFactory
+                .select(post.count())
+                .from(post)
+                .where(
+                        (post.category.eq(category).and(post.title.contains(keyword)))
+                                .or(post.category.eq(category).and(post.content.contains(keyword)))
+                )
+                .fetchOne();
+
+        return new PageImpl<>(posts, pageable, count);
+    }
 }
