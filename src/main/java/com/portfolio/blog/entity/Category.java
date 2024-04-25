@@ -20,8 +20,11 @@ public class Category {
     @Column(name = "category_name")
     private String name;
 
-    public void update(CategoryUpdateDto dto) {
-        this.name = dto.getName();
+    @Column(name = "order_number")
+    private Long orderNumber;
+
+    public void orderNumberUpdate(CategoryUpdateDto dto) {
+        this.orderNumber = dto.getOrderNumber();
     }
 
 }

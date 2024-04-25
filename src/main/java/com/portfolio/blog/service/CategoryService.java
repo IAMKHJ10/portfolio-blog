@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,17 +21,23 @@ public class CategoryService {
 
     @Transactional
     public void save(CategorySaveDto dto){
+        Optional<Category> lastCategory = categoryRepository.findTopByOrderByOrderNumberDesc();
         Category category = Category.builder()
                 .name(dto.getName())
+                .orderNumber(lastCategory.isPresent() ? lastCategory.get().getOrderNumber()+1 : 1)
                 .build();
         categoryRepository.save(category);
     }
 
     @Transactional
     public void update(CategoryUpdateDto dto) {
+
+        categoryRepository.orderChange(dto.getOrderNumber());
+
         Category category = categoryRepository.findById(dto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 카테고리입니다."));
-        category.update(dto);
+                .orElseThrow(() -> new RuntimeException("선택하신 카테고리를 찾을 수 없습니다."));
+
+        category.orderNumberUpdate(dto);
     }
 
     @Transactional(readOnly = true)

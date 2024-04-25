@@ -59,7 +59,7 @@ public class CommentService {
     @Transactional
     public void update(CommentUpdateDto dto) {
 
-        Post post = postRepository.findById(dto.getPostId())
+        postRepository.findById(dto.getPostId())
                 .orElseThrow(() -> new IllegalArgumentException("글을 찾을 수 없습니다."));
 
         Comment comment = commentRepository.findById(dto.getId())

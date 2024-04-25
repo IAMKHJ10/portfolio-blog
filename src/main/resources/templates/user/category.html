@@ -5,29 +5,25 @@
     .a{width:800px;margin:180px auto 0;}
     .cate{margin:100px}
     .cen{text-align: center;}
+    .arrow{height: 30px;width: 30px;vertical-align: -webkit-baseline-middle;cursor:pointer;}
+    .blue{background-color: lightblue;}
 </style>
 <script th:inline="javascript">
     $(document).ready(function() {
         $('.bar').find('a[href="' + document.location.pathname + '"]').addClass('active')
     })
 
-    function saveCate(is,id){
-        let url = '/category/save'
+    function saveCate(is){
         const name = $(is).parent().prev().children().val()
-        if(name==''){
+        if($.trim(name)==''){
             alert('카테고리명을 입력하세요.')
             return false
         }
 
-        if(id!=''){
-            url = '/category/update'
-        }
-
-        $('#categoryId').val(id)
         $('#categoryName').val(name)
 
         $.ajax({
-            url: url,
+            url: '/category/save',
             data: $("#cateForm").serialize(),
             type: 'POST',
             success: function(res){
@@ -38,10 +34,14 @@
     }
 
     function addDiv(){
+        if($('.addInput').length>0){
+            return false
+        }
+
         const html = ''
         +'<tr>'
-            +'<td><input type="text" class="form-control"></td>'
-            +'<td class="cen" colspan="2"><button type="button" class="btn btn-primary" onclick="saveCate(this,\'\')">저장</button></td>'
+            +'<td><input type="text" class="addInput form-control"></td>'
+            +'<td class="cen" colspan="4"><button type="button" class="btn btn-primary" onclick="saveCate(this)">저장</button></td>'
         +'</tr>'
         $('#tbody').append(html);
     }
@@ -62,8 +62,11 @@
         </li>
     </ul>
     <form id="cateForm">
-        <input type="hidden" id="categoryId" name="id">
         <input type="hidden" id="categoryName" name="name">
+    </form>
+    <form id="cateOrderForm">
+        <input type="hidden" id="" name="id">
+        <input type="hidden" id="" name="name">
     </form>
     <div class="row cate" id="cate">
         <div class="table-responsive">
@@ -72,13 +75,11 @@
                 <tr>
                     <th scope="col">카테고리명 <button type="button" class="btn btn-primary" onclick="addDiv()">추가</button></th>
                     <th scope="col"></th>
-                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
-                    <tr th:each="category:${categoryList}">
-                        <td><input type="text" class="form-control" th:value="${category.name}"></td>
-                        <td class="cen"><button type="button" class="btn btn-primary" th:onclick="saveCate(this,[[${category.id}]])">저장</button></td>
+                    <tr class="con" th:each="category:${categoryList}">
+                        <td><input type="text" class="form-control" th:value="${category.name}" readonly></td>
                         <td class="cen"><button type="button" class="btn btn-danger" th:onclick="delCate(this,[[${category.id}]])">삭제</button></td>
                     </tr>
                 </tbody>
