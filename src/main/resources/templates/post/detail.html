@@ -47,7 +47,7 @@
     .like{filter:invert(16%) sepia(95%) saturate(7277%) hue-rotate(359deg) brightness(105%) contrast(113%);}
     .comment_info_wrap{margin-bottom: 200px;}
     .chatArea{resize:none;height: 155px;}
-    .chatTitle{font-weight:bold;}
+    .chatFix{position: fixed;top: 200px;left: 50px;width: 450px;}
 </style>
 <script th:inline="javascript">
     function list(){
@@ -261,27 +261,23 @@
         window.addEventListener('beforeunload', function () { //현재 페이지를 떠나거나 브라우저를 종료하려 할 때
             leave() //채팅 연결 종료
         })
+
+        $('.chatOnOff').hide()
     })
+
+    function onOff() {
+        if($('.chatOnOff').css('display')=='none'){
+            $('.chatOnOff').show()
+        }else{
+            $('.chatOnOff').hide()
+        }
+    }
 </script>
 <body>
     <div th:replace="~{common/bodyUtil::bodyUtil}"></div>
     <div th:replace="~{common/bodyHeader::bodyHeader}"></div>
 
     <div class="t">
-        <div class="chatTitle" th:if="${chat!=null}">실시간 채팅</div>
-        <div class="mb-3" th:if="${chat!=null}">
-            <input type="hidden" id="roomId" th:if="${chat!=null}" th:value="${chat.name}">
-            <input type="hidden" id="userName" th:if="${session.USER!=null}" th:value="${session.USER.uid}">
-            <div class="form-control chatArea" id="chatArea"></div>
-            <div class="d-flex justify-content-evenly mt-1">
-                <div class="col-2">
-                    <button type="button" class="btn btn-outline-primary" id="enter" onclick="enter()">채팅 시작</button>
-                </div>
-                <div class="col-10">
-                    <input type="text" class="form-control" id="chatText" onkeydown="send()">
-                </div>
-            </div>
-        </div>
         <div class="t_con">
             <div class="t_title" th:text="${post.title}"></div>
             <span class="t_name" th:text="${post.member.name}"></span>
@@ -311,6 +307,7 @@
         </div>
     </div>
 
+    <!-- 댓글 시작 -->
     <div class="comment">
         <div class="comment_form">
             <form id="commentForm">
@@ -383,6 +380,24 @@
             <!-- 답글 끝 -->
         </div>
     </div>
-
+    <!-- 댓글 끝 -->
+    <!-- 채팅 시작 -->
+    <div class="chatFix">
+        <button type="button" th:if="${chat!=null}" class="btn btn-outline-secondary" onclick="onOff()">실시간 채팅</button>
+        <div class="chatOnOff" th:if="${chat!=null}">
+            <input type="hidden" id="roomId" th:if="${chat!=null}" th:value="${chat.name}">
+            <input type="hidden" id="userName" th:if="${session.USER!=null}" th:value="${session.USER.uid}">
+            <div class="form-control chatArea" id="chatArea"></div>
+            <div class="d-flex justify-content-evenly mt-1">
+                <div class="col-3">
+                    <button type="button" class="btn btn-outline-primary" id="enter" onclick="enter()">채팅 시작</button>
+                </div>
+                <div class="col-9">
+                    <input type="text" class="form-control" id="chatText" onkeydown="send()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 채팅 끝 -->
 </body>
 </html>

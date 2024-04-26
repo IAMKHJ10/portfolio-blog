@@ -1,12 +1,11 @@
 package com.portfolio.blog.dto.category;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
-public class CategoryListDto {
+@Setter
+public class CategoryDeleteDto {
     private Long id;
     private String name;
-    private Long orderNumber;
 }

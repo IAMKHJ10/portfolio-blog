@@ -1,6 +1,5 @@
 package com.portfolio.blog.entity;
 
-import com.portfolio.blog.dto.category.CategoryUpdateDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,9 +21,5 @@ public class Category {
 
     @Column(name = "order_number")
     private Long orderNumber;
-
-    public void orderNumberUpdate(CategoryUpdateDto dto) {
-        this.orderNumber = dto.getOrderNumber();
-    }
 
 }

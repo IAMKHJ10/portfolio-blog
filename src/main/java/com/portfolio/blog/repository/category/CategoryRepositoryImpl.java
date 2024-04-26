@@ -11,11 +11,11 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public void orderChange(Long orderNumber) {
+    public void update(Long id, Long orderNumber) {
         jpaQueryFactory
                 .update(category)
-                .set(category.orderNumber, category.orderNumber.add(1))
-                .where(category.orderNumber.goe(orderNumber))
+                .set(category.orderNumber, orderNumber)
+                .where(category.id.eq(id))
                 .execute();
     }
 }

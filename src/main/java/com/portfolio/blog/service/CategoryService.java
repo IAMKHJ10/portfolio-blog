@@ -1,11 +1,13 @@
 package com.portfolio.blog.service;
 
+import com.portfolio.blog.dto.category.CategoryDeleteDto;
 import com.portfolio.blog.dto.category.CategoryListDto;
 import com.portfolio.blog.dto.category.CategorySaveDto;
-import com.portfolio.blog.dto.category.CategoryUpdateDto;
 import com.portfolio.blog.entity.Category;
 import com.portfolio.blog.repository.category.CategoryRepository;
+import com.portfolio.blog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final PostRepository postRepository;
 
     @Transactional
     public void save(CategorySaveDto dto){
@@ -30,29 +33,30 @@ public class CategoryService {
     }
 
     @Transactional
-    public void update(CategoryUpdateDto dto) {
-
-        categoryRepository.orderChange(dto.getOrderNumber());
-
-        Category category = categoryRepository.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException("선택하신 카테고리를 찾을 수 없습니다."));
-
-        category.orderNumberUpdate(dto);
+    public void update(Long id, Long orderNumber) {
+        categoryRepository.update(id, orderNumber);
     }
 
     @Transactional(readOnly = true)
     public List<CategoryListDto> findAll() {
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "orderNumber"));
         List<CategoryListDto> list = new ArrayList<>();
 
         for (Category category : categories){
             CategoryListDto dto = CategoryListDto.builder()
                     .id(category.getId())
                     .name(category.getName())
+                    .orderNumber(category.getOrderNumber())
                     .build();
             list.add(dto);
         }
         return list;
+    }
+
+    @Transactional
+    public void delete(CategoryDeleteDto dto) {
+        categoryRepository.deleteById(dto.getId());
+        postRepository.deleteByCategory(dto.getName());
     }
 
 }

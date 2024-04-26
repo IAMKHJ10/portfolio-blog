@@ -64,7 +64,7 @@
             success: function(res){
                 if(res.key=='ok'){
                     alert('글이 등록되었습니다.')
-                    location.href = '/post/detail/'+res.data
+                    location.href = '/post/list?page=1&category='+res.data
                 }else if(res.key=='no'){
                     alert('회원정보가 없습니다.')
                     location.href = '/login'
