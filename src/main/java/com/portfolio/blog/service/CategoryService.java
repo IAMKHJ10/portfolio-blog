@@ -3,6 +3,7 @@ package com.portfolio.blog.service;
 import com.portfolio.blog.dto.category.CategoryDeleteDto;
 import com.portfolio.blog.dto.category.CategoryListDto;
 import com.portfolio.blog.dto.category.CategorySaveDto;
+import com.portfolio.blog.dto.category.CategorySortDto;
 import com.portfolio.blog.entity.Category;
 import com.portfolio.blog.repository.category.CategoryRepository;
 import com.portfolio.blog.repository.post.PostRepository;
@@ -33,8 +34,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public void update(Long id, Long orderNumber) {
-        categoryRepository.update(id, orderNumber);
+    public void sort(CategorySortDto dto) {
+        categoryRepository.sort(dto);
+        categoryRepository.updateOrderNumber(dto);
     }
 
     @Transactional(readOnly = true)

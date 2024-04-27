@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryUpdateDto {
+public class CategorySortDto {
     private Long startId;
     private Long startNum;
-    private Long endId;
     private Long endNum;
 }

@@ -1,5 +1,9 @@
 package com.portfolio.blog.repository.category;
 
+import com.portfolio.blog.dto.category.CategorySortDto;
+
 public interface CategoryRepositoryCustom {
-    void update(Long id, Long orderNumber);
+    void sort(CategorySortDto dto);
+
+    void updateOrderNumber(CategorySortDto dto);
 }

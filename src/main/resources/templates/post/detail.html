@@ -115,7 +115,7 @@
             data: $(is).parent().serialize(),
             type: 'POST',
             success: function(res){
-                $("#comment_info_wrap").replaceWith(res);
+                $("#comment_info_wrap").replaceWith(res)
                 alert('수정되었습니다.')
             }
         })
@@ -127,7 +127,7 @@
             data: $(is).next().serialize(),
             type: 'POST',
             success: function(res){
-                $("#comment_info_wrap").replaceWith(res);
+                $("#comment_info_wrap").replaceWith(res)
                 alert('삭제되었습니다.')
             }
         })

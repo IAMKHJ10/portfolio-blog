@@ -2,7 +2,7 @@ package com.portfolio.blog.controller;
 
 import com.portfolio.blog.dto.category.CategoryDeleteDto;
 import com.portfolio.blog.dto.category.CategorySaveDto;
-import com.portfolio.blog.dto.category.CategoryUpdateDto;
+import com.portfolio.blog.dto.category.CategorySortDto;
 import com.portfolio.blog.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +27,9 @@ public class CategoryController {
     }
 
     // 카테고리 순서변경
-    @PostMapping("/category/update")
-    public String update(@ModelAttribute CategoryUpdateDto dto, Model model){
-        categoryService.update(dto.getStartId(), dto.getEndNum());
-        categoryService.update(dto.getEndId(), dto.getStartNum());
+    @PostMapping("/category/sort")
+    public String sort(@ModelAttribute CategorySortDto dto, Model model){
+        categoryService.sort(dto);
         model.addAttribute("categoryList", categoryService.findAll());
         return "user/category :: #cate";
     }
