@@ -28,10 +28,9 @@ public class CategoryController {
 
     // 카테고리 순서변경
     @PostMapping("/category/sort")
-    public String sort(@ModelAttribute CategorySortDto dto, Model model){
+    public String sort(@ModelAttribute CategorySortDto dto){
         categoryService.sort(dto);
-        model.addAttribute("categoryList", categoryService.findAll());
-        return "user/category :: #cate";
+        return "user/category";
     }
 
     // 카테고리 삭제
