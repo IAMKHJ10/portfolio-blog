@@ -1,5 +1,6 @@
 package com.portfolio.blog.controller;
 
+import com.portfolio.blog.dto.category.CategoryListDto;
 import com.portfolio.blog.dto.post.PostListDto;
 import com.portfolio.blog.service.CategoryService;
 import com.portfolio.blog.service.PostService;
@@ -13,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
@@ -22,7 +25,13 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model){
-        model.addAttribute("categoryList", categoryService.findAll());
+
+        List<CategoryListDto> result = categoryService.findAll();
+
+        if(!result.isEmpty()){
+            model.addAttribute("categoryList", result);
+        }
+
         return "main";
     }
 

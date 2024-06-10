@@ -52,7 +52,9 @@ public class CategoryService {
                     .build();
             list.add(dto);
         }
+
         return list;
+
     }
 
     @Transactional
